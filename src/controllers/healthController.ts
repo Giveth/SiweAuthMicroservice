@@ -1,6 +1,6 @@
-import { Body, Controller, Post, Route, Response, SuccessResponse, Get, Security } from "tsoa";
+import { Route, Get } from "tsoa";
 
-interface HealthResponse {
+type HealthResponse = {
   message:string;
 }
 

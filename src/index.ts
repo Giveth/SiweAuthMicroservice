@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import swaggerUi from "swagger-ui-express";
 import { healthRouter } from "./routes/healthRouter";
 const app: Application = express();
