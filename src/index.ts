@@ -1,12 +1,22 @@
-import express from 'express';
+import express, { Application, Request, Response } from "express";
+import swaggerUi from "swagger-ui-express";
+import { healthRouter } from "./routes/healthRouter";
+const app: Application = express();
 
-const app = express();
 
-app.get('/health',
-    (req
-     , res) => {
-                    res.send('I am alive')
-});
+app.use(express.static("public"));
+
+app.use(healthRouter);
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(undefined, {
+    swaggerOptions: {
+      url: "/swagger.json",
+    },
+  })
+);
+
 
 app.listen(3040, () => {
   console.log('The application is listening on port 3040!');
