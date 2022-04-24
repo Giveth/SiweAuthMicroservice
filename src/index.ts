@@ -1,12 +1,13 @@
 import express, { Application } from "express";
 import swaggerUi from "swagger-ui-express";
-import { healthRouter } from "./routes/healthRouter";
+import { healthRouter } from "./routes/v1/healthRouter";
+import { v1Router } from "./routes/v1";
 const app: Application = express();
 
 
 app.use(express.static("public"));
 
-app.use(healthRouter);
+app.use(v1Router);
 app.use(
   "/docs",
   swaggerUi.serve,
