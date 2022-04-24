@@ -4,6 +4,7 @@ FROM node:16.14.2-alpine3.15
 WORKDIR /usr/src/app
 
 COPY tsconfig.json .
+COPY tsoa.json .
 COPY package*.json ./
 COPY src ./src
 
