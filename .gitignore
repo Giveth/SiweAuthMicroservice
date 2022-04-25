@@ -21,3 +21,4 @@ config/production.env
 *.rdb
 
 *.log
+*.log.*
