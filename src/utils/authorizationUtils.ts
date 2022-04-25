@@ -1,3 +1,5 @@
+import { logger } from "./logger";
+
 export const decodeBasicAuthentication = (basicAuthentication :string) :{
   username:string,
   secret:string
@@ -9,6 +11,7 @@ export const decodeBasicAuthentication = (basicAuthentication :string) :{
       secret: decodedStr.split(":")[1]
     };
   } catch (e) {
+    logger.error('decodeBasicAuthentication() error', e)
     throw e
   }
 

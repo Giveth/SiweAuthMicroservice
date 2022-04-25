@@ -2,6 +2,7 @@ import { Route, Tags, Post, Body, Security, Inject } from "tsoa";
 import { AccessToken } from "../../entities/accessToken";
 import { Application } from "../../entities/application";
 import { generateJwtToken } from "../../services/tokenServie";
+import { logger } from "../../utils/logger";
 
 
 @Route("/v1/accessToken")
@@ -26,6 +27,7 @@ export class TokenController {
         application
       });
     } catch (e) {
+      logger.error('generateAccessToken() error', e)
       throw e;
     }
   }

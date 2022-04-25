@@ -1,5 +1,4 @@
-// tslint:disable-next-line:no-var-requires
-const RotatingFileStream = require('bunyan-rotating-file-stream');
+import RotatingFileStream from 'bunyan-rotating-file-stream';
 
 import { createLogger, levelFromName, DEBUG, LogLevelString } from "bunyan";
 
@@ -7,7 +6,7 @@ function createBunyanLogger() {
   const logDir = process.env.LOG_PATH || './logs/apiGive.log';
   // tslint:disable-next-line:no-console
   console.log('Bunyan log level is', process.env.LOG_LEVEL || 'debug');
-  const bunyanStreams: any[] = [
+  const bunyanStreams : any = [
     {
       type: 'raw',
       stream: new RotatingFileStream({
