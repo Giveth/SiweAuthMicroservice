@@ -1,5 +1,5 @@
 export type AccessToken = {
-  applicationId: string
+  applicationId: number
   expirationDate: number
   value: string;
   scopes:string[]
