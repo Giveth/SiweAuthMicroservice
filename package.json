@@ -9,7 +9,7 @@
     "prestart": "npm run swagger",
     "swagger": "tsoa spec",
     "prebuild": "npm run swagger",
-    "start": "NODE_ENV=localhost ts-node-dev --project ./tsconfig.json --respawn ./src/index.ts",
+    "start": "NODE_ENV=development ts-node-dev --project ./tsconfig.json --respawn ./src/index.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "prettify": "prettier  --write '**/*.ts*'"
@@ -25,6 +25,7 @@
   "dependencies": {
     "bunyan": "^1.8.15",
     "bunyan-rotating-file-stream": "^2.0.1",
+    "dotenv": "^16.0.0",
     "express": "4.17.3",
     "jsonwebtoken": "^8.5.1",
     "swagger-ui-express": "^4.3.0",

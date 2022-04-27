@@ -1,23 +1,9 @@
-import express, { Application } from "express";
-import swaggerUi from "swagger-ui-express";
-import { v1Router } from "./routes/v1";
-const app: Application = express();
+import dotenv from "dotenv"
+import * as path from 'path';
+dotenv.config({
+  path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
+})
 
+import { initServer } from "./server";
 
-app.use(express.static("public"));
-
-app.use(v1Router);
-app.use(
-  "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(undefined, {
-    swaggerOptions: {
-      url: "/swagger.json",
-    },
-  })
-);
-
-
-app.listen(3040, () => {
-  console.log('The application is listening on port 3040!');
-});
+initServer()
