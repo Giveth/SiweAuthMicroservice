@@ -5,7 +5,7 @@ dotenv.config({
 })
 
 import { initServer } from "./server";
-import { AppDataSource } from "./data-source";
+import { AppDataSource } from "./dataSource";
 
 const initDbConnection = async () =>{
   try {
