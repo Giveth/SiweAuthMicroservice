@@ -12,7 +12,7 @@ services:
     ports:
       - "5443:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - apigive-db-data:/var/lib/postgresql/data
 
   apigive-postgress-test:
     # CAUTION: Running tests will delete all records of this db, so just use this container for test
@@ -27,7 +27,7 @@ services:
     ports:
       - "5444:5432"
     volumes:
-      - db-data-test:/var/lib/postgresql/data
+      - apigive-db-data-test:/var/lib/postgresql/data
 
   apigive-redis:
     # it's better to not using latest tag, maybe latest tag have some breaking changes
@@ -39,9 +39,9 @@ services:
     ports:
       - "6489:6379"
     volumes:
-      - redis-data:/bitnami/redis/data
+      - apigive-redis-data:/bitnami/redis/data
 
 volumes:
-  db-data:
-  db-data-test:
-  redis-data:
+  apigive-db-data:
+  apigive-db-data-test:
+  apigive-redis-data:
