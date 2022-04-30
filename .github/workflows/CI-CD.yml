@@ -19,7 +19,7 @@ jobs:
         ports:
           - 6379:6379
       postgres:
-        image: postgres:12
+        image: postgres:14
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -43,6 +43,8 @@ jobs:
         run: npm run lint
       - name: Run migrations
         run: npm run db:migrate:run:test
+      - name: Run tests
+        run: npm run test
 
   publish:
     if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging'
