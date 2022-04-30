@@ -41,6 +41,10 @@ jobs:
         run: npm ci
       - name: Run linter
         run: npm run lint
+      - name: Sleep for 30 seconds, To make sure db is up, we would delete it in future
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '30s'
       - name: Run migrations
         run: npm run db:migrate:run:test
       - name: Run tests
