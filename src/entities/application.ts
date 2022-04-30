@@ -1,29 +1,35 @@
-import { BaseEntity, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
-import { Organization } from "./organization";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+} from 'typeorm';
+import { Organization } from './organization';
 
 @Entity()
-export class Application extends BaseEntity{
+export class Application extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
   @Column()
-  label:string;
+  label: string;
   @Column()
-  name:string;
+  name: string;
   @Column()
-  secret: string
+  secret: string;
   @Column('text', { array: true, default: '{}' })
-  scopes: string[]
+  scopes: string[];
   @Column('text', { array: true, default: '{}' })
-  validIps: string[]
+  validIps: string[];
   @Column()
-  logo ?: string
+  logo?: string;
   @Column()
-  allowedRequestsPerHour :number
+  allowedRequestsPerHour: number;
   @Column()
-  isActive: boolean
-
-
+  isActive: boolean;
 
   @Index()
   @ManyToOne(type => Organization)

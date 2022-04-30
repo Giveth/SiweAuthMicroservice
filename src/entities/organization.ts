@@ -1,19 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 
 @Entity()
-export class Organization extends BaseEntity{
+export class Organization extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
   @Column()
-  name: string
+  name: string;
   @Column()
-  label: string
+  label: string;
   @Column()
-  website: string
+  website: string;
 
-  @Column({default: false})
-  isVerified: boolean
+  @Column({ default: false })
+  isVerified: boolean;
 
-  @Column({default: false})
-  isActive: boolean
+  @Column({ default: false })
+  isActive: boolean;
 }

@@ -1,12 +1,12 @@
 import RotatingFileStream from 'bunyan-rotating-file-stream';
 
-import { createLogger, levelFromName, DEBUG, LogLevelString } from "bunyan";
+import { createLogger, levelFromName, DEBUG, LogLevelString } from 'bunyan';
 
 function createBunyanLogger() {
   const logDir = process.env.LOG_PATH || './logs/apiGive.log';
   // tslint:disable-next-line:no-console
   console.log('Bunyan log level is', process.env.LOG_LEVEL || 'debug');
-  const bunyanStreams : any = [
+  const bunyanStreams: any = [
     {
       type: 'raw',
       stream: new RotatingFileStream({
@@ -21,7 +21,10 @@ function createBunyanLogger() {
     },
   ];
 
-  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+  if (
+    process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === 'test'
+  ) {
     // Adding logs to console in local machine and running tests
     bunyanStreams.push({
       stream: process.stdout,

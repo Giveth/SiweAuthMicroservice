@@ -1,24 +1,32 @@
-import { BaseEntity, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
-import { Application } from "./application";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+} from 'typeorm';
+import { Application } from './application';
 
 @Entity()
-export class Log  extends BaseEntity{
+export class Log extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
   @Column()
-  accessTokenId:string
+  accessTokenId: string;
 
   @Column()
-  serviceName:string
+  serviceName: string;
   @Column()
-  status:string
+  status: string;
   @Column()
-  error: string
+  error: string;
   @Column()
-  trackId: string
+  trackId: string;
   @Column()
-  result: string
+  result: string;
 
   @Index()
   @ManyToOne(type => Application)

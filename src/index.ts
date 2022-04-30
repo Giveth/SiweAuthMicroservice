@@ -1,22 +1,21 @@
-import dotenv from "dotenv"
-import * as path from 'path';
+import dotenv from "dotenv";
+import * as path from "path";
+
 dotenv.config({
-  path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
-})
+  path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ""}.env`)
+});
 
-import { initServer } from "./server";
-import { AppDataSource } from "./dataSource";
+import { initDbConnection, initServer } from "./server";
 
-const initDbConnection = async () =>{
-  try {
-    await AppDataSource.initialize();
-  } catch (e) {
-    console.log('initDbConnection error', e)
-    throw e
+initDbConnection().then(
+  () => {
+    return initServer();
   }
-}
-initDbConnection().then(()=>{
-  initServer()
-}).catch(e => {
+).then(
+  () => {
+    console.log("server is up");
+  }
+).catch(e => {
+  console.log("init server error", e);
   throw e;
-})
+});

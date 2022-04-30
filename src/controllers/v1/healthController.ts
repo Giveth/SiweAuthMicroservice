@@ -1,16 +1,16 @@
-import { Route, Get, Tags } from "tsoa";
+import { Route, Get, Tags } from 'tsoa';
 
 type HealthResponse = {
-  message:string;
-}
+  message: string;
+};
 
-@Route("/v1/health")
+@Route('/v1/health')
 @Tags('Health')
-export  class HealthController {
-  @Get("/")
+export class HealthController {
+  @Get('/')
   public async getMessage(): Promise<HealthResponse> {
     return {
-      message: "I am alive",
+      message: 'I am alive',
     };
   }
 }

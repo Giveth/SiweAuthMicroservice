@@ -1,13 +1,13 @@
 export const errorMessagesEnum: {
   [key: string]: {
-    code: number
-    message: string
-    httpStatusCode: number
-  }
+    code: number;
+    message: string;
+    httpStatusCode: number;
+  };
 } = {
-  UNAUTHORIZED : {
+  UNAUTHORIZED: {
     message: 'unAuthorized',
     httpStatusCode: 401,
-    code:1000
-  }
-}
+    code: 1000,
+  },
+};

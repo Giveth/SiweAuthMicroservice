@@ -1,12 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Scope extends BaseEntity{
+export class Scope extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
   @Column()
-  label:string
+  label: string;
   @Column()
-  description: string
+  description: string;
 }

@@ -1,9 +1,8 @@
-import { MigrationInterface, QueryRunner } from "typeorm"
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class createApplicationTable1651304945528 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS application
                 (
                     id integer NOT NULL,
@@ -23,12 +22,10 @@ export class createApplicationTable1651304945528 implements MigrationInterface {
                         ON DELETE NO ACTION
                 )
 
-        `)
-    }
+        `);
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-       await queryRunner.query(`DROP TABLE IF EXISTS application`)
-
-    }
-
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TABLE IF EXISTS application`);
+  }
 }

@@ -1,10 +1,9 @@
-import { MigrationInterface, QueryRunner } from "typeorm"
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class createLogTable1651305296248 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(
-          `
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `
                       CREATE TABLE IF NOT EXISTS log
                             (
                                 id integer NOT NULL,
@@ -21,12 +20,11 @@ export class createLogTable1651305296248 implements MigrationInterface {
                                     ON UPDATE NO ACTION
                                     ON DELETE NO ACTION
                             )
-          `
-        )
-    }
+          `,
+    );
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`DROP TABLE IF EXISTS log`)
-    }
-
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TABLE IF EXISTS log`);
+  }
 }
