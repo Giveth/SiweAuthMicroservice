@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
+import { Organization } from "./organization";
 
 @Entity()
 export class Application extends BaseEntity{
@@ -22,4 +23,11 @@ export class Application extends BaseEntity{
   @Column()
   isActive: boolean
 
+
+
+  @Index()
+  @ManyToOne(type => Organization)
+  organization: Organization;
+  @RelationId((application: Application) => application.organization)
+  organizationId: number;
 }

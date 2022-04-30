@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
+import { Application } from "./application";
 
 @Entity()
 export class Log  extends BaseEntity{
@@ -7,8 +8,7 @@ export class Log  extends BaseEntity{
 
   @Column()
   accessTokenId:string
-  @Column()
-  applicationId:string
+
   @Column()
   serviceName:string
   @Column()
@@ -19,4 +19,10 @@ export class Log  extends BaseEntity{
   trackId: string
   @Column()
   result: string
+
+  @Index()
+  @ManyToOne(type => Application)
+  application: Application;
+  @RelationId((log: Log) => log.application)
+  applicationId: number;
 }
