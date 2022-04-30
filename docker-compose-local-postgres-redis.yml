@@ -2,32 +2,32 @@ version: '3.3'
 
 services:
   apigive-postgress:
-    image: postgres
+    image: postgres:14.2-bullseye
     container_name: apigive-postgress
     environment:
       - POSTGRES_DB=apigive
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - PGDATA=/var/lib/postgresql/data/pgdata
+      - PGDATA=/var/lib/postgresql/data_new/pgdata
     ports:
       - "5443:5432"
     volumes:
-      - apigive-db-data:/var/lib/postgresql/data
+      - apigive-postgres-data:/var/lib/postgresql/data
 
   apigive-postgress-test:
     # CAUTION: Running tests will delete all records of this db, so just use this container for test
-    # For running application use above container port: 5442
-    image: postgres
+    # For running application use above container
+    image: postgres:14.2-bullseye
     container_name: apigive-postgress-test
     environment:
-      - POSTGRES_DB=givethio
+      - POSTGRES_DB=apigive
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - PGDATA=/var/lib/postgresql/data/pgdata
+      - PGDATA=/var/lib/postgresql/data_new/pgdata
     ports:
       - "5444:5432"
     volumes:
-      - apigive-db-data-test:/var/lib/postgresql/data
+      - apigive-postgres-data-test:/var/lib/postgresql/data
 
   apigive-redis:
     # it's better to not using latest tag, maybe latest tag have some breaking changes
@@ -42,6 +42,6 @@ services:
       - apigive-redis-data:/bitnami/redis/data
 
 volumes:
-  apigive-db-data:
-  apigive-db-data-test:
+  apigive-postgres-data:
+  apigive-postgres-data-test:
   apigive-redis-data:
