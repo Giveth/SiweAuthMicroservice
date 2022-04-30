@@ -44,6 +44,7 @@ async function runMigrations (){
   await (await AppDataSource.initialize() ).runMigrations({
     transaction: 'all',
   });
+  console.log('Migrations has been executed successfully')
 }
 
 it("should equal 1 to 1", function() {
