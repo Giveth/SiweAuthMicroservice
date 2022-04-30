@@ -1,16 +1,14 @@
-
 import dotenv from "dotenv";
 import * as path from "path";
+import { initServer } from "../src/server";
+import { AppDataSource } from "../src/dataSource";
+import { assert } from "chai";
 
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ""}.env`)
 });
-console.log('process.env', process.env)
-import { initDbConnection, initServer } from "../src/server";
-// import { dropdb, createdb } from 'pgtools';
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { dropdb, createdb }  = require('pgtools');
-import { AppDataSource } from "../src/dataSource";
-import { assert } from "chai";
 
 
 async function dropDatabaseAndCreateFreshOne() {

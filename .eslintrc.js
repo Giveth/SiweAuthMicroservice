@@ -22,6 +22,8 @@ module.exports ={
       "error",
       "type"
     ],
-    "no-prototype-builtins":"warn"
+    "no-prototype-builtins":"warn",
+    "no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars":"warn"
   }
 }

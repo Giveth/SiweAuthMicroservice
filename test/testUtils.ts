@@ -1,10 +1,9 @@
 import { assert } from "chai";
 
-// tslint:disable-next-line:no-var-requires
-const moment = require('moment');
-
+// eslint:disable-next-line
 export const serverUrl = 'http://localhost:3040';
-export const assertThrowsAsync = async (fn : ()=>{}, errorMessage ?:string) => {
+// eslint:disable-next-line
+export const assertThrowsAsync = async (fn : any, errorMessage ?:string) => {
   let f = () => {
     // empty function
   };
@@ -23,11 +22,13 @@ export const assertThrowsAsync = async (fn : ()=>{}, errorMessage ?:string) => {
   }
 };
 
+// eslint:disable-next-line
 export function sleep(ms:number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export const assertNotThrowsAsync = async (fn : ()=>{})=> {
+// eslint:disable-next-line
+export const assertNotThrowsAsync = async (fn : any)=> {
   let f = () => {
     // empty function
   };
@@ -42,9 +43,12 @@ export const assertNotThrowsAsync = async (fn : ()=>{})=> {
   }
 };
 
+// eslint:disable-next-line
 export function generateRandomEthereumAddress(): string {
   return `0x${generateHexNumber(40)}`;
 }
+
+// eslint:disable-next-line
 export function generateRandomTxHash(): string {
   return `0x${generateHexNumber(64)}`;
 }
