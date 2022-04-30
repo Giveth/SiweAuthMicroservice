@@ -64,12 +64,21 @@ function generateHexNumber(len: number) {
 }
 
 export const SEED_DATA = {
-  FIRST_ORGANIZATION :{
+  firstOrganization :{
     id:1,
     name: 'test name',
     website: 'test website',
     label: 'test label',
     isVerified: true,
     isActive: true
+  },
+  firstApplication :{
+    id: 1,
+    organizationId: 1,
+    secret: 'test secret',
+    label:'test-application',
+    name:'test application',
+    scopes:[],
+    isActive:true
   }
 }

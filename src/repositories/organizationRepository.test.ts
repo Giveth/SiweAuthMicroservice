@@ -4,9 +4,9 @@ import { assert } from "chai";
 
 describe('findOrganizationById() test cases', ()=>{
   it("should return organization by id", async() => {
-    const firstOrganization = await findOrganizationById(SEED_DATA.FIRST_ORGANIZATION.id);
+    const firstOrganization = await findOrganizationById(SEED_DATA.firstOrganization.id);
     assert.isOk(firstOrganization);
-    assert.equal(firstOrganization?.name, SEED_DATA.FIRST_ORGANIZATION.name)
+    assert.equal(firstOrganization?.name, SEED_DATA.firstOrganization.name)
   });
   it("should return null for invalidId id", async() => {
     const firstOrganization = await findOrganizationById(0);

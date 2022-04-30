@@ -5,6 +5,8 @@ import { AppDataSource } from "../src/dataSource";
 import { assert } from "chai";
 import { Organization } from "../src/entities/organization";
 import { SEED_DATA } from "./testUtils";
+import { Application } from "../src/entities/application";
+import { findOrganizationById } from "../src/repositories/organizationRepository";
 
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ""}.env`)
@@ -50,10 +52,16 @@ async function runMigrations (){
 }
 
 const seedOrganizations = async ()=>{
-  await Organization.create({...SEED_DATA.FIRST_ORGANIZATION}).save()
+  await Organization.create({...SEED_DATA.firstOrganization}).save()
 }
-const  seedDb = async ()=>{
+const seedApplications = async ()=>{
+  const applicationData :any = {...SEED_DATA.firstApplication};
+  applicationData.organization =await findOrganizationById(applicationData.organizationId)
+  await Application.create(applicationData).save()
+}
+const seedDb = async ()=>{
   await seedOrganizations()
+  await seedApplications()
 }
 
 it("should equal 1 to 1", function() {

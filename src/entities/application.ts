@@ -12,7 +12,7 @@ import { Organization } from './organization';
 @Entity()
 export class Application extends BaseEntity {
   @PrimaryGeneratedColumn()
-  readonly id: number;
+  id: number;
 
   @Column()
   label: string;
@@ -24,9 +24,11 @@ export class Application extends BaseEntity {
   scopes: string[];
   @Column('text', { array: true, default: '{}' })
   validIps: string[];
+
   @Column()
   logo?: string;
-  @Column()
+
+  @Column({default:0})
   allowedRequestsPerHour: number;
   @Column()
   isActive: boolean;
