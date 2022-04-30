@@ -5,7 +5,7 @@ export class createAccessTokenTable1651305057524 implements MigrationInterface {
     await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS public.access_token
                 (
-                    id integer NOT NULL,
+                    id SERIAL NOT NULL,
                     "expirationDate" integer NOT NULL,
                     value character varying COLLATE pg_catalog."default" NOT NULL,
                     scopes text[] COLLATE pg_catalog."default" NOT NULL DEFAULT '{}'::text[],

@@ -5,7 +5,7 @@ export class createApplicationTable1651304945528 implements MigrationInterface {
     await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS application
                 (
-                    id integer NOT NULL,
+                    id SERIAL NOT NULL,
                     label character varying COLLATE pg_catalog."default" NOT NULL,
                     name character varying COLLATE pg_catalog."default" NOT NULL,
                     secret character varying COLLATE pg_catalog."default" NOT NULL,

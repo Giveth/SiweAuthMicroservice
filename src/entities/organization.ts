@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 @Entity()
 export class Organization extends BaseEntity {
   @PrimaryGeneratedColumn()
-  readonly id: number;
+  id: number;
   @Column()
   name: string;
   @Column()

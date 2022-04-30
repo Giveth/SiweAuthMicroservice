@@ -7,7 +7,7 @@ export class createOrganizationTable1651303031278
     await queryRunner.query(`
             CREATE TABLE IF NOT EXISTS organization
                 (
-                    id integer NOT NULL,
+                    id SERIAL NOT NULL,
                     name character varying COLLATE pg_catalog."default" NOT NULL,
                     label character varying COLLATE pg_catalog."default" NOT NULL,
                     website character varying COLLATE pg_catalog."default" NOT NULL,

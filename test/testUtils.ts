@@ -1,7 +1,7 @@
 import { assert } from "chai";
 
 // eslint:disable-next-line
-export const serverUrl = 'http://localhost:3040';
+export const serverUrl = 'http://localhost:3041';
 // eslint:disable-next-line
 export const assertThrowsAsync = async (fn : any, errorMessage ?:string) => {
   let f = () => {
@@ -61,4 +61,15 @@ function generateHexNumber(len: number) {
     output += hex.charAt(Math.floor(Math.random() * hex.length));
   }
   return output;
+}
+
+export const SEED_DATA = {
+  FIRST_ORGANIZATION :{
+    id:1,
+    name: 'test name',
+    website: 'test website',
+    label: 'test label',
+    isVerified: true,
+    isActive: true
+  }
 }
