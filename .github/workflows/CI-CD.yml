@@ -41,6 +41,8 @@ jobs:
         run: npm ci
       - name: Run linter
         run: npm run lint
+      - name: Run migrations
+        run: npm run db:migrate:run:test
 
   publish:
     if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging'
