@@ -30,7 +30,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
+          - 5442:5432
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js
@@ -41,10 +41,11 @@ jobs:
         run: npm ci
       - name: Run linter
         run: npm run lint
-      - name: Run tests
-        run: npm run test
       - name: Run migrations
         run: npm run db:migrate:run:test
+      - name: Run tests
+        run: npm run test
+
 
 
   publish:
