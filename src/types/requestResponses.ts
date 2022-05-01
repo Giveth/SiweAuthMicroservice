@@ -1,4 +1,4 @@
-import { JwtPayload } from "../services/jwtService";
+import { JwtPayload } from '../services/jwtService';
 
 export type CreateDonationRequest = {
   amount: number;
@@ -14,7 +14,7 @@ export type CreateDonationResponse = {
 };
 
 export type CreateAccessTokenResponse = {
-  accessToken: string,
-  lifeTime: number,
-  payload : JwtPayload
-}
+  accessToken: string;
+  lifeTime: number;
+  payload: JwtPayload;
+};

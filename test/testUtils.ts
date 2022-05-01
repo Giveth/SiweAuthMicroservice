@@ -1,9 +1,9 @@
-import { assert } from "chai";
+import { assert } from 'chai';
 
 // eslint:disable-next-line
 export const serverUrl = 'http://localhost:3041';
 // eslint:disable-next-line
-export const assertThrowsAsync = async (fn : any, errorMessage ?:string) => {
+export const assertThrowsAsync = async (fn: any, errorMessage?: string) => {
   let f = () => {
     // empty function
   };
@@ -23,12 +23,12 @@ export const assertThrowsAsync = async (fn : any, errorMessage ?:string) => {
 };
 
 // eslint:disable-next-line
-export function sleep(ms:number) {
+export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // eslint:disable-next-line
-export const assertNotThrowsAsync = async (fn : any)=> {
+export const assertNotThrowsAsync = async (fn: any) => {
   let f = () => {
     // empty function
   };
@@ -64,21 +64,21 @@ function generateHexNumber(len: number) {
 }
 
 export const SEED_DATA = {
-  firstOrganization :{
-    id:1,
+  firstOrganization: {
+    id: 1,
     name: 'test name',
     website: 'test website',
     label: 'test label',
     isVerified: true,
-    isActive: true
+    isActive: true,
   },
-  firstApplication :{
+  firstApplication: {
     id: 1,
     organizationId: 1,
     secret: 'test secret',
-    label:'test-application',
-    name:'test application',
-    scopes:[],
-    isActive:true
-  }
-}
+    label: 'test-application',
+    name: 'test application',
+    scopes: [],
+    isActive: true,
+  },
+};

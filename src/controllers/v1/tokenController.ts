@@ -3,7 +3,7 @@ import { AccessToken } from '../../entities/accessToken';
 import { Application } from '../../entities/application';
 import { generateAccessToken } from '../../services/tokenServie';
 import { logger } from '../../utils/logger';
-import { CreateAccessTokenResponse } from "../../types/requestResponses";
+import { CreateAccessTokenResponse } from '../../types/requestResponses';
 
 @Route('/v1/accessToken')
 @Tags('Token')

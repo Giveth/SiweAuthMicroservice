@@ -1,10 +1,10 @@
 import express, { Application } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import { v1Router } from './routes/v1';
-import { AppDataSource } from "./dataSource";
+import { AppDataSource } from './dataSource';
 import { DataSource } from 'typeorm';
 
-export let dbConnection: DataSource
+export let dbConnection: DataSource;
 export const initDbConnection = async () => {
   try {
     dbConnection = await AppDataSource.initialize();

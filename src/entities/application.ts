@@ -28,7 +28,7 @@ export class Application extends BaseEntity {
   @Column()
   logo?: string;
 
-  @Column({default:0})
+  @Column({ default: 0 })
   allowedRequestsPerHour: number;
   @Column()
   isActive: boolean;

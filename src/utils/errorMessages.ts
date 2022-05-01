@@ -21,5 +21,4 @@ export const errorMessagesEnum: {
     httpStatusCode: 403,
     code: 1001,
   },
-
 };

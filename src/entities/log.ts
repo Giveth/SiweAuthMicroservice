@@ -8,7 +8,7 @@ import {
   RelationId,
 } from 'typeorm';
 import { Application } from './application';
-import { AccessToken } from "./accessToken";
+import { AccessToken } from './accessToken';
 
 @Entity()
 export class Log extends BaseEntity {
