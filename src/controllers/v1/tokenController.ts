@@ -1,8 +1,9 @@
 import { Route, Tags, Post, Body, Security, Inject } from 'tsoa';
 import { AccessToken } from '../../entities/accessToken';
 import { Application } from '../../entities/application';
-import { generateJwtToken } from '../../services/tokenServie';
+import { generateAccessToken } from '../../services/tokenServie';
 import { logger } from '../../utils/logger';
+import { CreateAccessTokenResponse } from "../../types/requestResponses";
 
 @Route('/v1/accessToken')
 @Tags('Token')
@@ -18,11 +19,11 @@ export class TokenController {
     params: {
       application: Application;
     },
-  ): Promise<AccessToken> {
+  ): Promise<CreateAccessTokenResponse> {
     const { scopes } = body;
     const { application } = params;
     try {
-      return await generateJwtToken({
+      return await generateAccessToken({
         scopes,
         application,
       });

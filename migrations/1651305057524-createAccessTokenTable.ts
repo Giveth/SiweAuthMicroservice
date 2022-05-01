@@ -7,7 +7,8 @@ export class createAccessTokenTable1651305057524 implements MigrationInterface {
                 (
                     id SERIAL NOT NULL,
                     "expirationDate" integer NOT NULL,
-                    value character varying COLLATE pg_catalog."default" NOT NULL,
+                    jwt character varying COLLATE pg_catalog."default" NOT NULL,
+                    jti character varying COLLATE pg_catalog."default" NOT NULL,
                     scopes text[] COLLATE pg_catalog."default" NOT NULL DEFAULT '{}'::text[],
                     "isActive" boolean NOT NULL,
                     "applicationId" integer,

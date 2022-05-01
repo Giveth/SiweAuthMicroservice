@@ -17,7 +17,9 @@ export class AccessToken extends BaseEntity {
   @Column()
   expirationDate: number;
   @Column('text')
-  value: string;
+  jwt: string;
+  @Column('text')
+  jti: string;
   @Column('text', { array: true, default: '{}' })
   scopes: string[];
   @Column()
