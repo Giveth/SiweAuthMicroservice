@@ -47,5 +47,6 @@ export const generateAccessToken = async (params: {
     accessToken: jwt,
     lifeTime: lifeTimeSeconds,
     payload,
+    tokenType: 'Bearer',
   };
 };

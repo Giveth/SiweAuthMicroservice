@@ -1,4 +1,5 @@
 import { Route, Get, Tags } from 'tsoa';
+import { MESSAGES } from '../../utils/messages';
 
 type HealthResponse = {
   message: string;
@@ -10,7 +11,7 @@ export class HealthController {
   @Get('/')
   public async getMessage(): Promise<HealthResponse> {
     return {
-      message: 'I am alive',
+      message: MESSAGES.healthMessageImAlive,
     };
   }
 }

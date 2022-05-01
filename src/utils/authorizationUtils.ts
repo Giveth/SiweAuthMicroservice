@@ -1,5 +1,6 @@
 import { logger } from './logger';
 
+//TODO need to add unit test
 export const decodeBasicAuthentication = (
   basicAuthentication: string,
 ): {
@@ -19,4 +20,15 @@ export const decodeBasicAuthentication = (
     logger.error('decodeBasicAuthentication() error', e);
     throw e;
   }
+};
+
+//TODO need to add unit test
+export const createBasicAuthentication = (params: {
+  username: string;
+  secret: string;
+}): string => {
+  return (
+    'Basic ' +
+    Buffer.from(`${params.username}:${params.secret}`).toString('base64')
+  );
 };

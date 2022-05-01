@@ -20,3 +20,17 @@ export const findApplicationByIdJoinOrganization = async (
     })
     .getOne();
 };
+
+export const findApplicationByLabelAndSecret = async (params: {
+  label: string;
+  secret: string;
+}): Promise<Application | null> => {
+  return Application.createQueryBuilder('application')
+    .where(`label = :label`, {
+      label: params.label,
+    })
+    .andWhere(`secret = :secret`, {
+      secret: params.secret,
+    })
+    .getOne();
+};

@@ -65,10 +65,6 @@ const seedDb = async () => {
   //
 };
 
-it('should equal 1 to 1', function () {
-  assert.equal(1, 1);
-});
-
 before(async () => {
   try {
     await dropDatabaseAndCreateFreshOne();

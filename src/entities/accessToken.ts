@@ -15,7 +15,7 @@ export class AccessToken extends BaseEntity {
   readonly id: number;
 
   @Column()
-  expirationDate: number;
+  expirationDate?: number;
   @Column('text')
   jwt: string;
   @Column('text')

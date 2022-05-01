@@ -17,4 +17,5 @@ export type CreateAccessTokenResponse = {
   accessToken: string;
   lifeTime: number;
   payload: JwtPayload;
+  tokenType: string;
 };

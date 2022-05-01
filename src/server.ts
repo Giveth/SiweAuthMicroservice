@@ -3,6 +3,7 @@ import swaggerUi from 'swagger-ui-express';
 import { v1Router } from './routes/v1';
 import { AppDataSource } from './dataSource';
 import { DataSource } from 'typeorm';
+import bodyParser from 'body-parser';
 
 export let dbConnection: DataSource;
 export const initDbConnection = async () => {
@@ -18,6 +19,7 @@ export const initServer = async () => {
   const app: Application = express();
 
   app.use(express.static('public'));
+  app.use(bodyParser.json());
 
   app.use(v1Router);
   app.use(
