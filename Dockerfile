@@ -7,6 +7,7 @@ COPY tsconfig.json .
 COPY tsoa.json .
 COPY package*.json ./
 COPY src ./src
+COPY test ./test
 
 RUN npm ci
 RUN npm i -g pm2
