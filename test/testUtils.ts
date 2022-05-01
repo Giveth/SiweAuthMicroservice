@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import { scopeLabels } from '../src/services/scopeService';
 
 // eslint:disable-next-line
 export const serverUrl = 'http://localhost:3041';
@@ -65,6 +66,7 @@ function generateHexNumber(len: number) {
 
 export const SEED_DATA = {
   firstOrganization: {
+    // This item will be added by migration
     id: 1,
     name: 'test name',
     website: 'test website',
@@ -73,12 +75,14 @@ export const SEED_DATA = {
     isActive: true,
   },
   firstApplication: {
+    // This item will be added by migration
     id: 1,
     organizationId: 1,
     secret: 'test secret',
     label: 'test-application',
     name: 'test application',
-    scopes: [],
+    logo: 'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
+    scopes: [scopeLabels.CREATE_DONATION],
     isActive: true,
   },
 };

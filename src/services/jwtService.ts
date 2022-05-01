@@ -5,7 +5,7 @@ export type JwtPayload = {
   scopes: string[];
   applicationLabel: string;
   jti: string;
-}
+};
 
 export const generateJwt = (params: {
   lifeTimeSeconds: number;

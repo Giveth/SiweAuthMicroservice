@@ -62,8 +62,7 @@ const seedApplications = async () => {
   await Application.create(applicationData).save();
 };
 const seedDb = async () => {
-  await seedOrganizations();
-  await seedApplications();
+  //
 };
 
 it('should equal 1 to 1', function () {
