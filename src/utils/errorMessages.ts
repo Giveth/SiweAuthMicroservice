@@ -41,4 +41,9 @@ export const errorMessagesEnum = {
     httpStatusCode: 400,
     code: 2002,
   },
+  IMPACT_GRAPH_VALIDATION_ERROR: {
+    message: 'Invalid input data',
+    httpStatusCode: 400,
+    code: 2003,
+  },
 };

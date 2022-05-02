@@ -26,6 +26,7 @@ export const createDonationValidator = Joi.object({
   priceUsd: Joi.number().min(0.000001),
   txHash: Joi.string().required().pattern(txHashRegex),
   nonce: Joi.number().integer().min(0),
+  anonymous: Joi.boolean(),
   network: Joi.string()
     .required()
     .valid(...Object.keys(networkIds)),
