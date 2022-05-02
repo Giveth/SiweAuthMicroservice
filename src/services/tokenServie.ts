@@ -5,6 +5,7 @@ import { generateJwt, JwtPayload } from './jwtService';
 import { createNewAccessToken } from '../repositories/accessTokenRepository';
 import { generateRandomString } from '../utils/utils';
 import { CreateAccessTokenResponse } from '../types/requestResponses';
+import { StandardError } from '../types/StandardError';
 
 export const generateAccessToken = async (params: {
   scopes: string[];
@@ -14,7 +15,9 @@ export const generateAccessToken = async (params: {
   //Should check if scope is in db or not
   for (const scope of scopes) {
     if (!application.scopes.includes(scope)) {
-      const error = errorMessagesEnum.YOU_DONT_HAVE_ACCESS_TO_THIS_SCOPE;
+      const error = new StandardError(
+        errorMessagesEnum.YOU_DONT_HAVE_ACCESS_TO_THIS_SCOPE,
+      );
       error.message += `: ${scope}`;
       throw error;
     }

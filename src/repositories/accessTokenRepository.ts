@@ -5,7 +5,6 @@ import { Application } from '../entities/application';
 export const findActiveTokenByValue = async (
   jwt: string,
 ): Promise<AccessToken | null> => {
-  console.log('findActiveTokenByValue jwt ', jwt);
   return AccessToken.createQueryBuilder('access_token')
     .where(`jwt = :jwt`, {
       jwt,

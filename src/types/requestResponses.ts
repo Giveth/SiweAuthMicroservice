@@ -7,7 +7,7 @@ export type CreateDonationRequest = {
   amount: number;
 
   /**
-   * @example GIV
+   * @example "GIV"
    */
   currency: string;
 

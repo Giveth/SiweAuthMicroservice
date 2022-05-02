@@ -5,7 +5,7 @@ export const generateRandomString = (len: number): string => {
 };
 
 export const generateRandomNumber = (min: number, max: number): number => {
-  return Math.random() * (max - min) + min;
+  return Math.floor(Math.random() * (max - min)) + min;
 };
 
 export const networkIds = {

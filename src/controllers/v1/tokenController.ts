@@ -1,5 +1,4 @@
 import { Route, Tags, Post, Body, Security, Inject } from 'tsoa';
-import { AccessToken } from '../../entities/accessToken';
 import { Application } from '../../entities/application';
 import { generateAccessToken } from '../../services/tokenServie';
 import { logger } from '../../utils/logger';

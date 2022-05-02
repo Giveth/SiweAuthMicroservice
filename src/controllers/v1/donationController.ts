@@ -1,7 +1,6 @@
 import { Route, Tags, Post, Body, Security, Inject, Example } from 'tsoa';
 import { AccessToken } from '../../entities/accessToken';
 import { Application } from '../../entities/application';
-import { createDonation } from '../../services/donationService';
 import {
   CreateDonationRequest,
   CreateDonationResponse,
@@ -15,6 +14,7 @@ import {
   generateRandomEthereumAddress,
   generateRandomTxHash,
 } from '../../../test/testUtils';
+import { getGivethIoAdapterInstance } from '../../adapters/adapterFactory';
 
 @Route('/v1/donations')
 @Tags('Donation')
@@ -41,9 +41,14 @@ export class DonationController {
   ): Promise<CreateDonationResponse> {
     try {
       validateWithJoiSchema(body, createDonationValidator);
-      const donationId = await createDonation({
-        application: params.application,
+      // const donationId = await createDonation({
+      //   application: params.application,
+      //   inputData: body,
+      // });
+      const givethIoAdapter = getGivethIoAdapterInstance();
+      const { donationId } = await givethIoAdapter.createDonation({
         inputData: body,
+        application: params.application,
       });
       return { donationId };
     } catch (e) {

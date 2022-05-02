@@ -1,10 +1,15 @@
-export const errorMessagesEnum: {
-  [key: string]: {
-    code: number;
-    message: string;
-    httpStatusCode: number;
-  };
-} = {
+export const errorMessagesEnum = {
+  INTERNAL_SERVER_ERROR: {
+    message: 'Internal Server Error',
+    httpStatusCode: 500,
+    code: 3000,
+  },
+  NOT_IMPLEMENTED: {
+    message: 'Not implemented',
+    httpStatusCode: 500,
+    code: 3001,
+  },
+
   UNAUTHORIZED: {
     message: 'unAuthorized',
     httpStatusCode: 401,
@@ -16,10 +21,15 @@ export const errorMessagesEnum: {
     httpStatusCode: 403,
     code: 1001,
   },
+  TOKEN_DOESNT_HAVE_ACCESS_TO_THIS_SCOPE: {
+    message: 'Access token doesnt have access to this scope',
+    httpStatusCode: 403,
+    code: 1002,
+  },
   SCOPE_NOT_FOUND: {
     message: 'Invalid scope',
     httpStatusCode: 403,
-    code: 1002,
+    code: 1003,
   },
   INVALID_FROM_WALLET_ADDRESS: {
     message: 'Invalid fromWalletAddress',

@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { authenticateJwtAccessToken } from '../../middlewares/authentication';
 import { getAccessScopeMiddleware } from '../../middlewares/authorization';
 import { DonationController } from '../../controllers/v1/donationController';
@@ -13,7 +13,7 @@ donationRouter.post(
   getAccessScopeMiddleware({
     scope: scopeLabels.CREATE_DONATION,
   }),
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { application, accessToken } = res.locals;
       const result = await donationController.createDonation(req.body, {
@@ -22,8 +22,7 @@ donationRouter.post(
       });
       res.send(result);
     } catch (e) {
-      logger.error('/donations POST error', e);
-      throw e;
+      next(e);
     }
   },
 );

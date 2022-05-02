@@ -13,6 +13,7 @@
     "test:applicationRepository": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts  ./src/repositories/applicationRepository.test.ts ",
     "test:organizationRepository": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts   ./src/repositories/organizationRepository.test.ts",
     "test:tokenRouter": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts   ./src/routes/v1/tokenRouter.test.ts",
+    "test:donationRouter": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts   ./src/routes/v1/donationRouter.test.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "prettify": "prettier  --write '**/*.ts*'",

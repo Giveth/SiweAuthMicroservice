@@ -1,5 +1,8 @@
 import { assert } from 'chai';
 import { scopeLabels } from '../src/services/scopeService';
+import { findApplicationById } from '../src/repositories/applicationRepository';
+import { generateAccessToken } from '../src/services/tokenServie';
+import { Application } from 'express';
 
 // eslint:disable-next-line
 export const serverUrl = 'http://localhost:3041';
@@ -85,4 +88,19 @@ export const SEED_DATA = {
     scopes: [scopeLabels.CREATE_DONATION],
     isActive: true,
   },
+};
+
+export const createAccessTokenForTest = async (params: {
+  scopes: string[];
+  applicationId: number;
+}): Promise<string> => {
+  const application = await findApplicationById(params.applicationId);
+  if (!application) {
+    throw new Error('Application not found');
+  }
+  const { accessToken } = await generateAccessToken({
+    application,
+    scopes: params.scopes,
+  });
+  return accessToken;
 };

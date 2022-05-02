@@ -4,6 +4,7 @@ import { v1Router } from './routes/v1';
 import { AppDataSource } from './dataSource';
 import { DataSource } from 'typeorm';
 import bodyParser from 'body-parser';
+import { errorHandler } from './middlewares/errorHandler';
 
 export let dbConnection: DataSource;
 export const initDbConnection = async () => {
@@ -31,7 +32,7 @@ export const initServer = async () => {
       },
     }),
   );
-
+  app.use(errorHandler);
   const port = process.env.PORT || 3040;
   app.listen(port, () => {
     console.log(`The application is listening on port ${port}`);

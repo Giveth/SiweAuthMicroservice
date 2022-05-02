@@ -8,7 +8,7 @@ const tokenController = new TokenController();
 tokenRouter.post(
   '/accessToken',
   authenticateThirdPartyBasicAuth,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next) => {
     try {
       const { application } = res.locals;
       const result = await tokenController.generateAccessToken(
@@ -21,8 +21,7 @@ tokenRouter.post(
       );
       res.send(result);
     } catch (e) {
-      logger.error('/accessToken error', e);
-      throw e;
+      next(e);
     }
   },
 );

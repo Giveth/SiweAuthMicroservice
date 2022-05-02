@@ -6,6 +6,8 @@ import {
   findApplicationById,
   findApplicationByLabelAndSecret,
 } from '../repositories/applicationRepository';
+import { StandardError } from '../types/StandardError';
+import { errorMessagesEnum } from '../utils/errorMessages';
 
 export const authenticateThirdPartyBasicAuth = async (
   req: Request,
@@ -15,7 +17,7 @@ export const authenticateThirdPartyBasicAuth = async (
   try {
     const authorization = req.headers.authorization as string;
     if (!authorization) {
-      throw new Error();
+      throw new StandardError(errorMessagesEnum.UNAUTHORIZED);
     }
     const { username, secret } = decodeBasicAuthentication(authorization);
     const application = await findApplicationByLabelAndSecret({
@@ -37,11 +39,11 @@ export const authenticateJwtAccessToken = async (
 ) => {
   const authorization = req.headers.authorization as string;
   if (!authorization) {
-    throw new Error();
+    throw new StandardError(errorMessagesEnum.UNAUTHORIZED);
   }
   const accessToken = await findActiveTokenByValue(authorization.split(' ')[1]);
   if (!accessToken) {
-    throw new Error('unAuthorized 401');
+    throw new StandardError(errorMessagesEnum.UNAUTHORIZED);
   }
   const application = await findApplicationById(accessToken.applicationId);
   res.locals.accessToken = accessToken;
