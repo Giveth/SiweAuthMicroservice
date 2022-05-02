@@ -6,6 +6,7 @@ export type CreateDonationRequest = {
   priceUsd: number;
   fromWalletAddress: string;
   toWalletAddress: string;
+  nonce?: number;
   txHash: string;
   network: 'ropsten' | 'mainnet' | 'gnosis';
 };
