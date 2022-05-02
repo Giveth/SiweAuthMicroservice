@@ -1,9 +1,9 @@
-import { CreateDonationRequest } from "../../types/requestResponses";
-import { Application } from "../../entities/application";
+import { CreateDonationRequest } from '../../types/requestResponses';
+import { Application } from '../../entities/application';
 
 export interface GivethIoInterface {
-  createDonation( params: {
+  createDonation(params: {
     inputData: CreateDonationRequest;
     application: Application;
-  }): Promise<{donationId: number}>
+  }): Promise<{ donationId: number }>;
 }

@@ -12,23 +12,16 @@ export const authenticateThirdPartyBasicAuth = async (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log('11');
   try {
     const authorization = req.headers.authorization as string;
     if (!authorization) {
       throw new Error();
     }
-    console.log('12');
-
     const { username, secret } = decodeBasicAuthentication(authorization);
-    console.log('13');
-
     const application = await findApplicationByLabelAndSecret({
       label: username,
       secret,
     });
-    console.log('14');
-
     res.locals.application = application;
     next();
   } catch (e) {
@@ -46,7 +39,7 @@ export const authenticateJwtAccessToken = async (
   if (!authorization) {
     throw new Error();
   }
-  const accessToken = await findActiveTokenByValue(authorization.split(' ')[0]);
+  const accessToken = await findActiveTokenByValue(authorization.split(' ')[1]);
   if (!accessToken) {
     throw new Error('unAuthorized 401');
   }

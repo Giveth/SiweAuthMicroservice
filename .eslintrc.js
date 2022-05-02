@@ -17,13 +17,9 @@ module.exports ={
     "@typescript-eslint"
   ],
   "rules": {
-    "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/consistent-type-definitions": [
-      "error",
-      "type"
-    ],
     "no-prototype-builtins":"warn",
     "no-unused-vars": "warn",
-    "@typescript-eslint/no-unused-vars":"warn"
+    "@typescript-eslint/no-unused-vars":"warn",
+    "@typescript-eslint/consistent-type-definitions":"off"
   }
 }

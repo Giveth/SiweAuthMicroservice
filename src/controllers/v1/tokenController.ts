@@ -3,7 +3,14 @@ import { AccessToken } from '../../entities/accessToken';
 import { Application } from '../../entities/application';
 import { generateAccessToken } from '../../services/tokenServie';
 import { logger } from '../../utils/logger';
-import { CreateAccessTokenResponse } from '../../types/requestResponses';
+import {
+  CreateAccessTokenResponse,
+  GenerateAccessTokenRequest,
+} from '../../types/requestResponses';
+import {
+  createAccessTokenValidator,
+  validateWithJoiSchema,
+} from '../../validators/schemaValidators';
 
 @Route('/v1/accessToken')
 @Tags('Token')
@@ -12,9 +19,7 @@ export class TokenController {
   @Security('basicAuth')
   public async generateAccessToken(
     @Body()
-    body: {
-      scopes: string[];
-    },
+    body: GenerateAccessTokenRequest,
     @Inject()
     params: {
       application: Application;
@@ -23,6 +28,7 @@ export class TokenController {
     const { scopes } = body;
     const { application } = params;
     try {
+      validateWithJoiSchema(body, createAccessTokenValidator);
       return await generateAccessToken({
         scopes,
         application,

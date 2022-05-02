@@ -78,7 +78,7 @@ export const SEED_DATA = {
     // This item will be added by migration
     id: 1,
     organizationId: 1,
-    secret: 'test secret',
+    secret: 'test-secret',
     label: 'test-application',
     name: 'test application',
     logo: 'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',

@@ -42,6 +42,7 @@ export const generateAccessToken = async (params: {
     jwt,
     jti,
     isActive: true,
+    expirationDate: lifeTimeSeconds + Math.floor(new Date().getTime() / 1000),
   });
   return {
     accessToken: jwt,

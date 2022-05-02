@@ -9,7 +9,6 @@ tokenRouter.post(
   '/accessToken',
   authenticateThirdPartyBasicAuth,
   async (req: Request, res: Response) => {
-    console.log('1');
     try {
       const { application } = res.locals;
       const result = await tokenController.generateAccessToken(
