@@ -1,5 +1,7 @@
 import Joi, { ObjectSchema, ValidationResult } from 'joi';
 import { networkIds } from '../utils/utils';
+import { StandardError } from "../types/StandardError";
+import { errorMessagesEnum } from "../utils/errorMessages";
 
 const ethereumWalletAddressRegex = /^0x[a-fA-F0-9]{40}$/;
 const txHashRegex = /^0x[a-fA-F0-9]{64}$/;
@@ -13,7 +15,9 @@ const throwHttpErrorIfJoiValidatorFails = (
   validationResult: ValidationResult,
 ) => {
   if (validationResult.error) {
-    throw new Error(validationResult.error.details[0].message);
+    const error = new StandardError(errorMessagesEnum.IMPACT_GRAPH_VALIDATION_ERROR);
+    error.description = validationResult.error.details[0].message;
+    throw  error;
   }
 };
 
