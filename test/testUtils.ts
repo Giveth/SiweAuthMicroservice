@@ -1,7 +1,4 @@
 import { assert } from 'chai';
-import { scopeLabels } from '../src/services/scopeService';
-import { findApplicationById } from '../src/repositories/applicationRepository';
-import { generateAccessToken } from '../src/services/tokenServie';
 import { Application } from 'express';
 
 // eslint:disable-next-line
@@ -66,41 +63,3 @@ function generateHexNumber(len: number) {
   }
   return output;
 }
-
-export const SEED_DATA = {
-  firstOrganization: {
-    // This item will be added by migration
-    id: 1,
-    name: 'test name',
-    website: 'test website',
-    label: 'test label',
-    isVerified: true,
-    isActive: true,
-  },
-  firstApplication: {
-    // This item will be added by migration
-    id: 1,
-    organizationId: 1,
-    secret: 'test-secret',
-    label: 'test-application',
-    name: 'test application',
-    logo: 'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
-    scopes: [scopeLabels.CREATE_DONATION],
-    isActive: true,
-  },
-};
-
-export const createAccessTokenForTest = async (params: {
-  scopes: string[];
-  applicationId: number;
-}): Promise<string> => {
-  const application = await findApplicationById(params.applicationId);
-  if (!application) {
-    throw new Error('Application not found');
-  }
-  const { accessToken } = await generateAccessToken({
-    application,
-    scopes: params.scopes,
-  });
-  return accessToken;
-};
