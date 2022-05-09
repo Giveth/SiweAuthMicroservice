@@ -70,6 +70,7 @@
     "mocha": "^9.2.2",
     "pgtools": "^0.1.1",
     "prettier": "2.5.1",
+    "sinon": "^13.0.1",
     "ts-node": "10.7.0",
     "ts-node-dev": "1.1.8",
     "typescript": "4.5.2"

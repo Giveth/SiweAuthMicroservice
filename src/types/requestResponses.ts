@@ -1,5 +1,6 @@
 import { JwtPayload } from '../services/jwtService';
 
+
 export type CreateDonationRequest = {
   /**
    * @example 10
