@@ -1,5 +1,5 @@
 import { generateNonce } from 'siwe';
-import { Route, Tags, Post } from 'tsoa';
+import { Route, Tags, Post, Body } from 'tsoa';
 import { logger } from '../../utils/logger';
 
 type authenticationResponse = {
@@ -10,7 +10,9 @@ type authenticationResponse = {
 @Tags('Authentication')
 export class AuthenticationController {
   @Post('/verify')
-  public async authenticate(): Promise<authenticationResponse> {
+  public async authenticate(
+    @Body() body: AuthenticationRequest
+  ): Promise<authenticationResponse> {
     try {
 
       return {
