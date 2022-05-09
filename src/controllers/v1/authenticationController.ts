@@ -10,7 +10,7 @@ type authenticationResponse = {
 @Tags('Authentication')
 export class AuthenticationController {
   @Post('/verify')
-  public async getMessage(): Promise<authenticationResponse> {
+  public async authenticate(): Promise<authenticationResponse> {
     try {
 
       return {

@@ -6,11 +6,11 @@ type authorizationResponse = {
   message: string;
 };
 
-@Route('/v1/authentication')
-@Tags('Authentication')
-export class AuthenticationController {
+@Route('/v1/authorization')
+@Tags('Authorization')
+export class AuthorizationController {
   @Post('/verify')
-  public async getMessage(): Promise<authorizationResponse> {
+  public async authorize(): Promise<authorizationResponse> {
     try {
       return {
         message: generateNonce(),
