@@ -1,22 +1,14 @@
 import { sign } from 'jsonwebtoken';
 
 export type JwtPayload = {
-  applicationId: number;
-  scopes: string[];
-  applicationLabel: string;
+  publicAddress: string;
+  expirationDate: Date;
   jti: string;
 };
 
-export const generateJwt = (params: {
-  lifeTimeSeconds: number;
-  payload: JwtPayload;
-}): {
-  jwt: string;
-} => {
-  const jwt = sign(params.payload, process.env.JWT_SECRET as string, {
-    expiresIn: `${params.lifeTimeSeconds}s`,
+export const generateJwt = (payload: JwtPayload): string => {
+  const jwt = sign(payload, process.env.JWT_SECRET as string, {
+    expiresIn: `${payload.expirationDate.valueOf()}s`,
   });
-  return {
-    jwt,
-  };
+  return jwt;
 };

@@ -10,6 +10,18 @@ export const errorMessagesEnum = {
     code: 3001,
   },
 
+  NONCE_INVALID: {
+    message: 'Nonce does not match',
+    httpStatusCode: 401,
+    code: 1000,
+  },
+
+  NONCE_EXPIRED: {
+    message: 'Nonce is no longer valid',
+    httpStatusCode: 401,
+    code: 1000,
+  },
+
   UNAUTHORIZED: {
     message: 'unAuthorized',
     httpStatusCode: 401,

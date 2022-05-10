@@ -1,5 +1,24 @@
 import { JwtPayload } from '../services/jwtService';
 
+export type AuthenticationRequest = {
+  signature: string;
+  message: string;
+  nonce: string;
+};
+
+export type AuthorizationRequest = {
+  siwe: SiweFields;
+  expiration: Date;
+};
+
+export type SiweFields = any;
+
+export type AuthenticationResponse = {
+  jwt: string;
+  expiration: number;
+};
+
+export type AuthorizationResponse = {};
 
 export type CreateDonationRequest = {
   /**
@@ -11,7 +30,6 @@ export type CreateDonationRequest = {
    * @example "GIV"
    */
   currency: string;
-
 
   /**
    * @example false
@@ -63,5 +81,5 @@ export type CreateAccessTokenResponse = {
   accessToken: string;
   lifeTime: number;
   payload: JwtPayload;
-  tokenType: string;
+  intent: string;
 };

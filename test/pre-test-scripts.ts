@@ -3,7 +3,7 @@ import * as path from 'path';
 import { initServer } from '../src/server';
 import { AppDataSource } from '../src/dataSource';
 import { assert } from 'chai';
-import { SEED_DATA } from './testUtils';
+import { SiweNonce } from '../src/entities/siweNonce';
 
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
@@ -49,7 +49,8 @@ async function runMigrations() {
 }
 
 const seedDb = async () => {
-  //
+  const nonce = SiweNonce.create({ nonce: '342', expirationDate: new Date() });
+  await nonce.save();
 };
 
 before(async () => {

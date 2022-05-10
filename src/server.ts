@@ -5,6 +5,7 @@ import { AppDataSource } from './dataSource';
 import { DataSource } from 'typeorm';
 import bodyParser from 'body-parser';
 import { errorHandler } from './middlewares/errorHandler';
+import { adminJsRootPath, getAdminBroRouter } from './routes/v1/adminbroRouter';
 
 export let dbConnection: DataSource;
 export const initDbConnection = async () => {
@@ -21,7 +22,7 @@ export const initServer = async () => {
 
   app.use(express.static('public'));
   app.use(bodyParser.json());
-
+  app.use(adminJsRootPath, await getAdminBroRouter());
   app.use(v1Router);
   app.use(
     '/docs',
