@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
   BaseEntity,
   Column,
@@ -38,6 +39,10 @@ export class AccessToken extends BaseEntity {
 
   @Column()
   isExpired: boolean;
+
+  didExpire(): boolean {
+    return this.expirationDate.valueOf() < moment().valueOf();
+  }
 
   @CreateDateColumn()
   createdAt: Date;

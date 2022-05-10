@@ -61,7 +61,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
           registry: ghcr.io
-          repository: giveth/apigive
+          repository: giveth/siwe_microservice
           add_git_labels: true
           # Add branch name to docker image tag @see{@link https://github.com/docker/build-push-action/tree/releases/v1#tag_with_ref}
           tag_with_ref: true

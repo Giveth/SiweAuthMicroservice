@@ -3,7 +3,7 @@ import RotatingFileStream from 'bunyan-rotating-file-stream';
 import { createLogger, levelFromName, DEBUG, LogLevelString } from 'bunyan';
 
 function createBunyanLogger() {
-  const logDir = process.env.LOG_PATH || './logs/apiGive.log';
+  const logDir = process.env.LOG_PATH || './logs/siwe_microservice.log';
   // tslint:disable-next-line:no-console
   console.log('Bunyan log level is', process.env.LOG_LEVEL || 'debug');
   const bunyanStreams: any = [
@@ -31,7 +31,7 @@ function createBunyanLogger() {
     });
   }
   return createLogger({
-    name: 'apiGive',
+    name: 'siwe_microservice',
     level: levelFromName[process.env.LOG_LEVEL as LogLevelString] || DEBUG,
     // level :process.env.LOG_LEVEL | 'error',
     streams: bunyanStreams,

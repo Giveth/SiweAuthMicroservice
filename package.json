@@ -1,5 +1,5 @@
 {
-  "name": "auth_microservice",
+  "name": "siwe_microservice",
   "version": "1.0.0",
   "description": "General Authentication Service for all Giveth Dapps",
   "main": "index.js",

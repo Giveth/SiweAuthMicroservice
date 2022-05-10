@@ -8,6 +8,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+/**
+ * Service Requested for access
+ */
+
 @Entity()
 export class GivethService extends BaseEntity {
   @PrimaryGeneratedColumn()

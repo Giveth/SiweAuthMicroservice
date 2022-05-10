@@ -1,8 +1,10 @@
 import { sign } from 'jsonwebtoken';
 
 export type JwtPayload = {
+  issuer: number;
   publicAddress: string;
   expirationDate: Date;
+  givethServiceLabel: string;
   jti: string;
 };
 

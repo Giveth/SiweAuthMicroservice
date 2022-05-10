@@ -4,10 +4,22 @@ export const errorMessagesEnum = {
     httpStatusCode: 500,
     code: 3000,
   },
+  SERVICE_NOT_IMPLEMENTED: {
+    message: 'Giveth Service Not Implemented',
+    httpStatusCode: 500,
+    code: 3001,
+  },
+
   NOT_IMPLEMENTED: {
     message: 'Not implemented',
     httpStatusCode: 500,
     code: 3001,
+  },
+
+  MISSING_LOGIN_DATA: {
+    message: 'Missing message, signature or nonce for verification',
+    httpStatusCode: 401,
+    code: 1000,
   },
 
   NONCE_INVALID: {
@@ -18,6 +30,18 @@ export const errorMessagesEnum = {
 
   NONCE_EXPIRED: {
     message: 'Nonce is no longer valid',
+    httpStatusCode: 401,
+    code: 1000,
+  },
+
+  JWT_EXPIRED: {
+    message: 'Access Token is expired',
+    httpStatusCode: 401,
+    code: 1000,
+  },
+
+  JWT_NOT_FOUND: {
+    message: 'Access token not found',
     httpStatusCode: 401,
     code: 1000,
   },

@@ -1,6 +1,8 @@
+import moment from 'moment';
 import { SiweMessage } from 'siwe';
 import { Route, Tags, Post, Body } from 'tsoa';
 import { AccessToken } from '../../entities/accessToken';
+import { GivethService } from '../../entities/givethService';
 import { SiweNonce } from '../../entities/siweNonce';
 import { findNonce } from '../../repositories/siweNonceRepository';
 import { generateJwt } from '../../services/jwtService';
@@ -11,6 +13,7 @@ import {
 import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
+import { generateRandomString } from '../../utils/utils';
 
 @Route('/v1/authentication')
 @Tags('Authentication')
@@ -32,16 +35,39 @@ export class AuthenticationController {
         throw new StandardError(errorMessagesEnum.NONCE_EXPIRED);
       }
 
-      const accessToken = AccessToken.create({});
+      const givethService = await GivethService.createQueryBuilder()
+        .where(`serviceLabel = :label`, { label: body.serviceLabel })
+        .getOne();
+
+      // what service access being requested
+      if (!givethService)
+        throw new StandardError(errorMessagesEnum.SERVICE_NOT_IMPLEMENTED);
+
+      const jti = `${
+        givethService.serviceLabel
+      }-${new Date().getTime()}-${generateRandomString(5)}`;
+
+      const expirationDate = moment().add(1, 'hour');
       const jwt = generateJwt({
-        jti: accessToken.jti,
+        issuer: Number(process.env.ISSUER_ID),
         publicAddress: fields.address,
-        expirationDate: accessToken.expirationDate,
+        expirationDate: expirationDate.toDate(),
+        givethServiceLabel: givethService.serviceLabel,
+        jti: jti,
       });
 
-      return {
+      const token = await AccessToken.create({
         jwt: jwt,
-        expiration: accessToken.expirationDate.valueOf(),
+        jti: jti,
+        publicAddress: fields.address,
+        issuer: process.env.ISSUER_ID,
+        expirationDate: expirationDate,
+        givethServiceId: givethService.id,
+      }).save();
+
+      return {
+        jwt: token.jwt,
+        expiration: token.expirationDate.valueOf(),
       };
     } catch (e) {
       logger.error('authenticationController error', e);
