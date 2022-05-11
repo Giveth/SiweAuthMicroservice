@@ -17,10 +17,6 @@ import { findAdminByEmail } from '../../repositories/adminRepository';
 // eslint:disable-next-line:no-var-requires
 const RedisStore = require('connect-redis')(session);
 
-// eslint:disable-next-line:no-var-requires
-const Cryptr = require('cryptr');
-const cryptr = new Cryptr(process.env.SECRETS_ENCRYPTION_KEY);
-
 interface AdminBroContextInterface {
   h: any;
   resource: any;
