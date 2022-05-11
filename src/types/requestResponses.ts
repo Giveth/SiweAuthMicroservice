@@ -17,9 +17,10 @@ export type SiweFields = any;
 export type AuthenticationResponse = {
   jwt: string;
   expiration: number;
+  publicAddress: string;
 };
 
-export type AuthorizationResponse = {};
+export type AuthorizationResponse = AuthenticationResponse;
 
 export type CreateAccessTokenResponse = {
   accessToken: string;

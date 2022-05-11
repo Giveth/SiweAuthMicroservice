@@ -3,6 +3,8 @@ import { generateNonce } from 'siwe';
 import { Route, Tags, Post } from 'tsoa';
 import { AccessToken } from '../../entities/accessToken';
 import { GivethService } from '../../entities/givethService';
+import { findAccessTokenByUniqueIdentifiers } from '../../repositories/accessTokenRepository';
+import { findGivethServiceByLabel } from '../../repositories/givethServiceRepository';
 import { AuthorizationResponse } from '../../types/requestResponses';
 import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
@@ -12,31 +14,34 @@ import { logger } from '../../utils/logger';
 @Tags('Authorization')
 export class AuthorizationController {
   @Post('/')
-  public async authorize(jwt: string): Promise<boolean> {
+  public async authorize(
+    jwt: string,
+    serviceLabel: string,
+  ): Promise<AuthorizationResponse> {
     try {
-      const verifiedJwt = verify(jwt, process.env.JWT_SECRET as string) as any;
-      const givethService = await GivethService.createQueryBuilder()
-        .where(`"serviceLabel" = :label`, {
-          label: verifiedJwt.givethServiceLabel,
-        })
-        .getOne();
-      const dbAccessToken = await AccessToken.createQueryBuilder()
-        .where(`jwt = :jwt`, { jwt: jwt })
-        .andWhere(`jti = :jti`, { jti: verifiedJwt.jti })
-        .andWhere(`"givethServiceId" = :id`, { id: givethService?.id })
-        .andWhere(`"isExpired" = false AND "isBlackListed" = false`)
-        .getOne();
+      const givethService = await findGivethServiceByLabel(serviceLabel);
+      if (!givethService)
+        throw new StandardError(errorMessagesEnum.SERVICE_NOT_IMPLEMENTED);
+
+      const verifiedJwt = verify(
+        jwt,
+        givethService.decryptedJwtSecret(),
+      ) as any;
+
+      const dbAccessToken = await findAccessTokenByUniqueIdentifiers(
+        jwt,
+        verifiedJwt.jti,
+        givethService,
+      );
 
       if (!dbAccessToken)
         throw new StandardError(errorMessagesEnum.JWT_NOT_FOUND);
 
-      if (dbAccessToken?.didExpire()) {
-        dbAccessToken.isExpired = true;
-        dbAccessToken.save();
-        throw new StandardError(errorMessagesEnum.JWT_EXPIRED);
-      }
-
-      return true;
+      return {
+        jwt: dbAccessToken.jwt,
+        expiration: dbAccessToken.expirationDate.valueOf(),
+        publicAddress: dbAccessToken.publicAddress,
+      };
     } catch (e) {
       logger.error('authorizationController error', e);
       throw e;

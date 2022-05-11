@@ -18,6 +18,10 @@ import { GivethService } from '../../entities/givethService';
 // eslint:disable-next-line:no-var-requires
 const RedisStore = require('connect-redis')(session);
 
+// eslint:disable-next-line:no-var-requires
+const Cryptr = require('cryptr');
+const cryptr = new Cryptr(process.env.SECRETS_ENCRYPTION_KEY);
+
 interface AdminBroContextInterface {
   h: any;
   resource: any;
@@ -207,14 +211,46 @@ const getAdminBroInstance = async () => {
             bulkDelete: {
               isVisible: false,
             },
-            edit: {
-              isVisible: true,
-            },
             delete: {
               isVisible: true,
             },
             new: {
-              isVisible: true,
+              isAccessible: (params: { currentAdmin: Admin }) =>
+                params.currentAdmin &&
+                params.currentAdmin.role === AdminRole.SUPER_ADMIN,
+              before: async (
+                request: AdminBroRequestInterface,
+              ) => {
+                if (request.payload.jwtSecret) {
+                  const bc = await cryptr.encrypt(
+                    request.payload.jwtSecret,
+                  );
+                  request.payload = {
+                    ...request.payload,
+                    jwtSecret: bc,
+                  };
+                }
+                return request;
+              },
+            },
+            edit: {
+              isAccessible: (params: { currentAdmin: Admin }) =>
+                params.currentAdmin &&
+                params.currentAdmin.role === AdminRole.SUPER_ADMIN,
+              before: async (
+                request: AdminBroRequestInterface,
+              ) => {
+                if (request.payload.password) {
+                  const bc = await cryptr.encrypt(
+                    request.payload.password,
+                  );
+                  request.payload = {
+                    ...request.payload,
+                    jwtSecret: bc,
+                  };
+                }
+                return request;
+              },
             },
           },
           properties: {

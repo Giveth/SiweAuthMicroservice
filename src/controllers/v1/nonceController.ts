@@ -12,14 +12,10 @@ type nonceResponse = {
 export class NonceController {
   @Get('/')
   public async getNonce(): Promise<nonceResponse> {
-    const nonceExpiration = moment().add(5, 'minutes');
-    const siweNonce = generateNonce();
-    const nonce = SiweNonce.create({
-      nonce: siweNonce,
-      expirationDate: nonceExpiration,
-    });
-
-    await nonce.save();
+    const nonce = await SiweNonce.create({
+      nonce: generateNonce(),
+      expirationDate: moment().add(5, 'minutes'),
+    }).save();
 
     return {
       message: nonce.nonce,

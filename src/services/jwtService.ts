@@ -1,7 +1,7 @@
 import { sign } from 'jsonwebtoken';
 
 export type JwtPayload = {
-  issuer: number;
+  serviceJwtSecret: string;
   publicAddress: string;
   expirationDate: Date;
   givethServiceLabel: string;
@@ -9,7 +9,7 @@ export type JwtPayload = {
 };
 
 export const generateJwt = (payload: JwtPayload): string => {
-  const jwt = sign(payload, process.env.JWT_SECRET as string, {
+  const jwt = sign(payload, payload.serviceJwtSecret as string, {
     expiresIn: `${payload.expirationDate.valueOf()}s`,
   });
   return jwt;

@@ -30,6 +30,11 @@ export class createGivethService1652157795429 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'jwtSecret',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
             name: 'isActive',
             type: 'boolean',
             isNullable: false,
