@@ -218,13 +218,9 @@ const getAdminBroInstance = async () => {
               isAccessible: (params: { currentAdmin: Admin }) =>
                 params.currentAdmin &&
                 params.currentAdmin.role === AdminRole.SUPER_ADMIN,
-              before: async (
-                request: AdminBroRequestInterface,
-              ) => {
+              before: async (request: AdminBroRequestInterface) => {
                 if (request.payload.jwtSecret) {
-                  const bc = await cryptr.encrypt(
-                    request.payload.jwtSecret,
-                  );
+                  const bc = await cryptr.encrypt(request.payload.jwtSecret);
                   request.payload = {
                     ...request.payload,
                     jwtSecret: bc,
@@ -237,13 +233,9 @@ const getAdminBroInstance = async () => {
               isAccessible: (params: { currentAdmin: Admin }) =>
                 params.currentAdmin &&
                 params.currentAdmin.role === AdminRole.SUPER_ADMIN,
-              before: async (
-                request: AdminBroRequestInterface,
-              ) => {
+              before: async (request: AdminBroRequestInterface) => {
                 if (request.payload.password) {
-                  const bc = await cryptr.encrypt(
-                    request.payload.password,
-                  );
+                  const bc = await cryptr.encrypt(request.payload.password);
                   request.payload = {
                     ...request.payload,
                     jwtSecret: bc,
