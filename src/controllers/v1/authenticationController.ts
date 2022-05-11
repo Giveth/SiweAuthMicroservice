@@ -1,12 +1,9 @@
 import moment from 'moment';
 import { SiweMessage } from 'siwe';
 import { Route, Tags, Post, Body } from 'tsoa';
-import { AccessToken } from '../../entities/accessToken';
 import { SiweNonce } from '../../entities/siweNonce';
-import { findGivethServiceByLabel } from '../../repositories/givethServiceRepository';
 import { findNonce } from '../../repositories/siweNonceRepository';
 import { generateAccessToken } from '../../services/authenticationService';
-import { generateJwt } from '../../services/jwtService';
 import {
   AuthenticationRequest,
   AuthenticationResponse,
@@ -38,6 +35,7 @@ export class AuthenticationController {
 
       const token = await generateAccessToken(body.serviceLabel, fields);
 
+      logger.info(`User with address ${token.publicAddress} logged in`)
       return {
         jwt: token.jwt,
         expiration: token.expirationDate.valueOf(),

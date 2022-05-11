@@ -13,7 +13,6 @@ import { Database, Resource } from '@adminjs/typeorm';
 import { logger } from '../../utils/logger';
 import { AccessToken } from '../../entities/accessToken';
 import { findAdminByEmail } from '../../repositories/adminRepository';
-import { GivethService } from '../../entities/givethService';
 
 // eslint:disable-next-line:no-var-requires
 const RedisStore = require('connect-redis')(session);
@@ -205,87 +204,6 @@ const getAdminBroInstance = async () => {
         },
       },
       {
-        resource: GivethService,
-        options: {
-          actions: {
-            bulkDelete: {
-              isVisible: false,
-            },
-            delete: {
-              isVisible: true,
-            },
-            new: {
-              isAccessible: (params: { currentAdmin: Admin }) =>
-                params.currentAdmin &&
-                params.currentAdmin.role === AdminRole.SUPER_ADMIN,
-              before: async (request: AdminBroRequestInterface) => {
-                if (request.payload.jwtSecret) {
-                  const bc = await cryptr.encrypt(request.payload.jwtSecret);
-                  request.payload = {
-                    ...request.payload,
-                    jwtSecret: bc,
-                  };
-                }
-                return request;
-              },
-            },
-            edit: {
-              isAccessible: (params: { currentAdmin: Admin }) =>
-                params.currentAdmin &&
-                params.currentAdmin.role === AdminRole.SUPER_ADMIN,
-              before: async (request: AdminBroRequestInterface) => {
-                if (request.payload.password) {
-                  const bc = await cryptr.encrypt(request.payload.password);
-                  request.payload = {
-                    ...request.payload,
-                    jwtSecret: bc,
-                  };
-                }
-                return request;
-              },
-            },
-          },
-          properties: {
-            id: {
-              isVisible: {
-                list: true,
-                filter: true,
-                show: true,
-                edit: false,
-                new: false,
-              },
-            },
-            serviceLabel: {
-              isVisible: {
-                list: true,
-                filter: true,
-                show: true,
-                edit: true,
-                new: true,
-              },
-            },
-            description: {
-              isVisible: {
-                list: true,
-                filter: true,
-                show: true,
-                edit: true,
-                new: true,
-              },
-            },
-            isActive: {
-              isVisible: {
-                list: true,
-                filter: true,
-                show: true,
-                edit: true,
-                new: true,
-              },
-            },
-          },
-        },
-      },
-      {
         resource: AccessToken,
         options: {
           actions: {
@@ -326,15 +244,6 @@ const getAdminBroInstance = async () => {
             },
             isBlackListed: {
               isVisible: true,
-            },
-            givethServiceId: {
-              isVisible: {
-                list: true,
-                filter: true,
-                show: true,
-                edit: false,
-                new: false,
-              },
             },
             createdAt: {
               isVisible: {

@@ -88,34 +88,9 @@ export class createAccessToken1652158302760 implements MigrationInterface {
         columnNames: ['jti'],
       }),
     );
-
-    await queryRunner.addColumn(
-      'access_token',
-      new TableColumn({
-        name: 'givethServiceId',
-        type: 'int',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'access_token',
-      new TableForeignKey({
-        columnNames: ['givethServiceId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'giveth_service',
-        onDelete: 'CASCADE',
-      }),
-    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = await queryRunner.getTable('access_token');
-    const foreignKey = table!.foreignKeys.find(
-      fk => fk.columnNames.indexOf('givethServiceId') !== -1,
-    );
-    if (foreignKey)
-      await queryRunner.dropForeignKey('access_token', foreignKey);
-    await queryRunner.dropColumn('access_token', 'givethServiceId');
     await queryRunner.dropTable('access_token');
   }
 }

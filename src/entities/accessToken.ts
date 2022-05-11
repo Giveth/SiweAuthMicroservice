@@ -10,7 +10,6 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
-import { GivethService } from './givethService';
 
 @Entity()
 export class AccessToken extends BaseEntity {
@@ -49,10 +48,4 @@ export class AccessToken extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Index()
-  @ManyToOne(() => GivethService)
-  givethService: GivethService;
-  @RelationId((accessToken: AccessToken) => accessToken.givethService)
-  givethServiceId: number;
 }
