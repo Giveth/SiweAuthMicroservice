@@ -1,5 +1,5 @@
 import { verify } from 'jsonwebtoken';
-import { Route, Tags, Post } from 'tsoa';
+import { Route, Tags, Post, Body } from 'tsoa';
 import { findAccessTokenByUniqueIdentifiers } from '../../repositories/accessTokenRepository';
 import { AuthorizationResponse } from '../../types/requestResponses';
 import { StandardError } from '../../types/StandardError';
@@ -10,12 +10,14 @@ import { logger } from '../../utils/logger';
 @Tags('Authorization')
 export class AuthorizationController {
   @Post()
-  public async authorize(jwt: string): Promise<AuthorizationResponse> {
+  public async authorize(
+    @Body() body: { jwt: string }
+  ): Promise<AuthorizationResponse> {
     try {
-      const verifiedJwt = verify(jwt, process.env.JWT_SECRET as string) as any;
+      const verifiedJwt = verify(body.jwt, process.env.JWT_SECRET as string) as any;
 
       const dbAccessToken = await findAccessTokenByUniqueIdentifiers(
-        jwt,
+        body.jwt,
         verifiedJwt.jti,
       );
 

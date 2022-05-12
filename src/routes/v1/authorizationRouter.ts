@@ -11,9 +11,10 @@ authorizationRouter.post(
   async (req: Request, res: Response, next) => {
     try {
       const { jwt } = req.body;
-      const result = await authController.authorize(jwt);
+      const result = await authController.authorize({ jwt });
       res.send(result);
     } catch (e) {
+      logger.error('authorizationController() error', e);
       next(e);
     }
   },
