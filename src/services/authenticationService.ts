@@ -4,7 +4,7 @@ import { generateRandomString } from '../utils/utils';
 import { generateJwt } from './jwtService';
 
 interface SiweMessage {
-  address: string,
+  address: string;
 }
 
 export const generateAccessToken = async (

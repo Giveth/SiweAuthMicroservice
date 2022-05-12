@@ -11,10 +11,13 @@ import { logger } from '../../utils/logger';
 export class AuthorizationController {
   @Post()
   public async authorize(
-    @Body() body: { jwt: string }
+    @Body() body: { jwt: string },
   ): Promise<AuthorizationResponse> {
     try {
-      const verifiedJwt = verify(body.jwt, process.env.JWT_SECRET as string) as any;
+      const verifiedJwt = verify(
+        body.jwt,
+        process.env.JWT_SECRET as string,
+      ) as any;
 
       const dbAccessToken = await findAccessTokenByUniqueIdentifiers(
         body.jwt,

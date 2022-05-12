@@ -1,9 +1,4 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableIndex,
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
 export class createAccessToken1652158302760 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

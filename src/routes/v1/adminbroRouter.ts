@@ -147,9 +147,7 @@ const getAdminBroInstance = async () => {
               isAccessible: (params: { currentAdmin: Admin }) =>
                 params.currentAdmin &&
                 params.currentAdmin.role === AdminRole.SUPER_ADMIN,
-              before: async (
-                request: AdminBroRequestInterface,
-              ) => {
+              before: async (request: AdminBroRequestInterface) => {
                 if (request.payload.password) {
                   const bc = await bcrypt.hash(
                     request.payload.password,
@@ -168,9 +166,7 @@ const getAdminBroInstance = async () => {
               isAccessible: (params: { currentAdmin: Admin }) =>
                 params.currentAdmin &&
                 params.currentAdmin.role === AdminRole.SUPER_ADMIN,
-              before: async (
-                request: AdminBroRequestInterface,
-              ) => {
+              before: async (request: AdminBroRequestInterface) => {
                 logger.debug({ request: request.payload });
                 if (request.payload.password) {
                   const bc = await bcrypt.hash(

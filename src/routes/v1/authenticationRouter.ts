@@ -9,11 +9,7 @@ authenticationRouter.post(
   '/authentication',
   async (req: Request, res: Response, next) => {
     try {
-      if (
-        !req.body.message ||
-        !req.body.nonce ||
-        !req.body.signature
-      ) {
+      if (!req.body.message || !req.body.nonce || !req.body.signature) {
         res.status(422).json({ message: errorMessagesEnum.MISSING_LOGIN_DATA });
         return;
       }
