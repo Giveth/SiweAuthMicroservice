@@ -14,7 +14,7 @@ import { logger } from '../../utils/logger';
 @Route('/v1/authentication')
 @Tags('Authentication')
 export class AuthenticationController {
-  @Post('/')
+  @Post()
   public async authenticate(
     @Body() body: AuthenticationRequest,
   ): Promise<AuthenticationResponse> {

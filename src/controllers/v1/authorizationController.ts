@@ -9,7 +9,7 @@ import { logger } from '../../utils/logger';
 @Route('/v1/authorization')
 @Tags('Authorization')
 export class AuthorizationController {
-  @Post('/')
+  @Post()
   public async authorize(jwt: string): Promise<AuthorizationResponse> {
     try {
       const verifiedJwt = verify(jwt, process.env.JWT_SECRET as string) as any;
