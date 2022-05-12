@@ -1,4 +1,4 @@
-import { Route, Get, Tags, Post } from 'tsoa';
+import { Route, Tags, Post } from 'tsoa';
 import { AccessToken } from '../../entities/accessToken';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
@@ -7,7 +7,7 @@ import { logger } from '../../utils/logger';
 @Tags('LogOut')
 export class LogoutController {
   @Post('/')
-  public async logOut(jwt: string): Promise<Boolean> {
+  public async logOut(jwt: string): Promise<boolean> {
     const token = await AccessToken.createQueryBuilder()
       .where('jwt = :jwt', { jwt: jwt })
       .getOne();

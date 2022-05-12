@@ -20,6 +20,7 @@ module.exports ={
     "no-prototype-builtins":"warn",
     "no-unused-vars": "warn",
     "@typescript-eslint/no-unused-vars":"warn",
-    "@typescript-eslint/consistent-type-definitions":"off"
+    "@typescript-eslint/consistent-type-definitions":"off",
+    "@typescript-eslint/no-var-requires":"warn"
   }
 }

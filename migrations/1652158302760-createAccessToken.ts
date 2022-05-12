@@ -2,8 +2,6 @@ import {
   MigrationInterface,
   QueryRunner,
   Table,
-  TableColumn,
-  TableForeignKey,
   TableIndex,
 } from 'typeorm';
 

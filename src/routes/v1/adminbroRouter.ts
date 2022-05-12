@@ -17,14 +17,6 @@ import { findAdminByEmail } from '../../repositories/adminRepository';
 // eslint:disable-next-line:no-var-requires
 const RedisStore = require('connect-redis')(session);
 
-interface AdminBroContextInterface {
-  h: any;
-  resource: any;
-  records: any[];
-  currentAdmin: Admin;
-  payload?: any;
-}
-
 interface AdminBroRequestInterface {
   payload?: any;
   record?: any;
@@ -157,7 +149,6 @@ const getAdminBroInstance = async () => {
                 params.currentAdmin.role === AdminRole.SUPER_ADMIN,
               before: async (
                 request: AdminBroRequestInterface,
-                context: AdminBroContextInterface,
               ) => {
                 if (request.payload.password) {
                   const bc = await bcrypt.hash(
@@ -179,7 +170,6 @@ const getAdminBroInstance = async () => {
                 params.currentAdmin.role === AdminRole.SUPER_ADMIN,
               before: async (
                 request: AdminBroRequestInterface,
-                context: AdminBroContextInterface,
               ) => {
                 logger.debug({ request: request.payload });
                 if (request.payload.password) {
