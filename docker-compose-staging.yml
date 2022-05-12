@@ -36,7 +36,7 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     restart: always
     volumes:
-      - redis-apigive-data:/bitnami/redis/data
+      - redis-siwe-microservice-data:/bitnami/redis/data
 
 volumes:
   redis-siwe-microservice-data:
