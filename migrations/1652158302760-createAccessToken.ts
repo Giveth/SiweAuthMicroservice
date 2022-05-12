@@ -36,11 +36,6 @@ export class createAccessToken1652158302760 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'issuer',
-            type: 'varchar',
-            isNullable: false,
-          },
-          {
             name: 'expirationDate',
             type: 'timestamp without time zone',
             isNullable: false,
@@ -49,13 +44,13 @@ export class createAccessToken1652158302760 implements MigrationInterface {
             name: 'isBlacklisted',
             type: 'boolean',
             isNullable: false,
-            default: 'false',
+            default: false,
           },
           {
             name: 'isExpired',
             type: 'boolean',
             isNullable: false,
-            default: 'false',
+            default: false,
           },
           {
             name: 'createdAt',

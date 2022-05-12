@@ -7,6 +7,6 @@ export const findAccessTokenByUniqueIdentifiers = async (
   return AccessToken.createQueryBuilder()
     .where(`jwt = :jwt`, { jwt: jwt })
     .andWhere(`jti = :jti`, { jti: jti })
-    .andWhere(`"isExpired" = false AND "isBlackListed" = false`)
+    .andWhere(`"isExpired" = false AND "isBlacklisted" = false`)
     .getOne();
 };

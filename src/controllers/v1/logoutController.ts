@@ -17,7 +17,7 @@ export class LogoutController {
     token.isBlacklisted = true;
     await token.save();
 
-    logger.info(`User with address ${token.publicAddress} logged out`)
+    logger.info(`User with address ${token.publicAddress} logged out`);
     return true;
   }
 }

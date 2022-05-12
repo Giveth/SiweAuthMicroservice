@@ -28,15 +28,12 @@ export class AccessToken extends BaseEntity {
   publicAddress: string;
 
   @Column()
-  issuer: string;
-
-  @Column()
   expirationDate: Date;
 
-  @Column()
+  @Column({ default: false })
   isBlacklisted: boolean;
 
-  @Column()
+  @Column({ default: false })
   isExpired: boolean;
 
   didExpire(): boolean {

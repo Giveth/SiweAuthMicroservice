@@ -63,3 +63,5 @@ function generateHexNumber(len: number) {
   }
   return output;
 }
+
+export const SEED_DATA = {};

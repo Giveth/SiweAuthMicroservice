@@ -1,4 +1,5 @@
 import { sign } from 'jsonwebtoken';
+import moment from 'moment';
 
 export type JwtPayload = {
   publicAddress: string;
@@ -7,8 +8,10 @@ export type JwtPayload = {
 };
 
 export const generateJwt = (payload: JwtPayload): string => {
+  const lifeTimeInMilliSeconds =
+    payload.expirationDate.valueOf() - moment().valueOf();
   const jwt = sign(payload, process.env.JWT_SECRET as string, {
-    expiresIn: `${payload.expirationDate.valueOf()}s`,
+    expiresIn: `${lifeTimeInMilliSeconds}`,
   });
   return jwt;
 };

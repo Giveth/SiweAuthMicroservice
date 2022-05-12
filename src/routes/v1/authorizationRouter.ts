@@ -7,14 +7,12 @@ export const authorizationRouter = express.Router();
 const authController = new AuthorizationController();
 
 authorizationRouter.post(
-  '/authorize',
+  '/authorization',
   async (req: Request, res: Response, next) => {
     try {
       const { jwt } = req.body;
       const result = await authController.authorize(jwt);
-      res.send({
-        authorized: result,
-      });
+      res.send(result);
     } catch (e) {
       next(e);
     }

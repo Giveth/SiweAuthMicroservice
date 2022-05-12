@@ -4,15 +4,12 @@ export type AuthenticationRequest = {
   signature: string;
   message: string;
   nonce: string;
-  serviceLabel: string;
 };
 
 export type AuthorizationRequest = {
-  siwe: SiweFields;
+  siwe: any;
   expiration: Date;
 };
-
-export type SiweFields = any;
 
 export type AuthenticationResponse = {
   jwt: string;

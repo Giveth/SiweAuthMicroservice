@@ -1,11 +1,13 @@
 import moment from 'moment';
-import { SiweMessage } from 'siwe';
 import { AccessToken } from '../entities/accessToken';
 import { generateRandomString } from '../utils/utils';
 import { generateJwt } from './jwtService';
 
+interface SiweMessage {
+  address: string,
+}
+
 export const generateAccessToken = async (
-  serviceLabel: string,
   fields: SiweMessage,
 ): Promise<AccessToken> => {
   const jti = `${new Date().getTime()}-${generateRandomString(5)}`;
@@ -23,7 +25,6 @@ export const generateAccessToken = async (
     jwt: jwt,
     jti: jti,
     publicAddress: fields.address,
-    issuer: process.env.ISSUER_ID,
     expirationDate: expirationDate,
   }).save();
 };
