@@ -34,7 +34,7 @@ export const initServer = async () => {
     }),
   );
   app.use(errorHandler);
-  const port = process.env.PORT || 3040;
+  const port = process.env.PORT || 3000;
   app.listen(port, () => {
     console.log(`The application is listening on port ${port}`);
   });
