@@ -13,6 +13,7 @@ import { ethers } from 'ethers';
 
 const siwe = require('siwe');
 const privateKey = process.env.PRIVATE_ETHERS_TEST_KEY as string;
+const publicKey = process.env.PUBLIC_ETHERS_TEST_KEY as string;
 const provider = ethers.getDefaultProvider();
 
 describe('/authentication test cases', authenticationTestCases);
@@ -29,10 +30,9 @@ function authenticationTestCases() {
 
     const wallet = new ethers.Wallet(privateKey, provider);
 
-    const address = generateRandomEthereumAddress();
     const siweMessage = new siwe.SiweMessage({
       domain,
-      address: address,
+      address: publicKey,
       nonce: nonce.nonce, // verification servers gives
       statement: 'This is a test statement.',
       uri: origin,
@@ -51,6 +51,6 @@ function authenticationTestCases() {
       signature: signature,
     });
     assert.equal(result.status, 200);
-    assert.equal(result.data.publicAddress, address);
+    assert.equal(result.data.publicAddress, publicKey);
   });
 }
