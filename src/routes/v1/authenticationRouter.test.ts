@@ -27,7 +27,7 @@ function authenticationTestCases() {
     const siweMessage = new siwe.SiweMessage({
       domain,
       address: address,
-      nonce: nonce.nonce,
+      nonce: nonce.nonce, // verification servers gives
       statement: 'This is a test statement.',
       uri: origin,
       version: '1',
