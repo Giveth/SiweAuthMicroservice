@@ -9,7 +9,7 @@ services:
     # 1. docker-compose -f docker-compose-staging.yml pull
     # 2. docker-compose -f docker-compose-staging.yml down
     # 3. docker-compose -f docker-compose-staging.yml up -d
-    image: ghcr.io/giveth/siwe-microservice:staging
+    image: ghcr.io/giveth/siweauthmicroservice:staging
     environment:
       - NODE_ENV=staging
     volumes:
@@ -24,7 +24,7 @@ services:
         source: ./logs
         target: /usr/src/app/dist/logs
     ports:
-      - "3040:3040"
+      - "3000:3000"
 
 
 
