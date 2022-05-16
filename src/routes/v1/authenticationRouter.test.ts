@@ -42,7 +42,6 @@ function authenticationTestCases() {
 
     const textMessage = siweMessage.prepareMessage()
     const signature = await wallet.signMessage(textMessage);
-    // const splitted = ethers.utils.splitSignature(signature)
 
     // for future stubbing examples
     sinon.stub(SiweMessage.prototype, 'validate').resolves(siweMessage);

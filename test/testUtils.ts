@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import { Application } from 'express';
 
 // eslint:disable-next-line
-export const serverUrl = 'http://localhost:3041';
+export const serverUrl = 'http://localhost:3001';
 // eslint:disable-next-line
 export const assertThrowsAsync = async (fn: any, errorMessage?: string) => {
   let f = () => {
