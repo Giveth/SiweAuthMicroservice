@@ -24,7 +24,7 @@ services:
         source: ./logs
         target: /usr/src/app/dist/logs
     ports:
-      - "3000:3000"
+      - "3040:3000"
 
 
 
