@@ -33,7 +33,7 @@ export const initServer = async () => {
         return callback(null, true);
       }
 
-      // removing http:// , https://, and :port
+      // removing http:// , https:// and :port
       const formattedOrigin = origin
         .replace('https://', '')
         .replace('http://', '')
