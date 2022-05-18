@@ -23,7 +23,7 @@ export class AuthenticationController {
       const fields = await message.validate(body.signature);
 
       const whitelistedNonce = await findNonce(fields.nonce);
-      if (!whitelistedNonce)
+      if (!whitelistedNonce || fields.nonce !== body.nonce)
         throw new StandardError(errorMessagesEnum.NONCE_INVALID);
 
       if (whitelistedNonce.isExpired()) {
