@@ -40,11 +40,11 @@ function authenticationTestCases() {
       chainId: '1',
     });
 
-    const textMessage = siweMessage.prepareMessage()
+    const textMessage = siweMessage.prepareMessage();
     const signature = await wallet.signMessage(textMessage);
 
     // for future stubbing examples
-    sinon.stub(SiweMessage.prototype, 'validate').resolves(siweMessage);
+    // sinon.stub(SiweMessage.prototype, 'validate').resolves(siweMessage);
     const result = await axios.post(`${serverUrl}/v1/authentication`, {
       message: textMessage,
       nonce: nonce.nonce,
