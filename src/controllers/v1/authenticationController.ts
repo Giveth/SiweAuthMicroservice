@@ -31,8 +31,10 @@ export class AuthenticationController {
         throw new StandardError(errorMessagesEnum.NONCE_EXPIRED);
       }
       const token = await generateAccessToken(fields);
-
       logger.info(`User with address ${token.publicAddress} logged in`);
+
+      // clean up to prevent reuse
+      await SiweNonce.delete({ id: whitelistedNonce.id });
       return {
         jwt: token.jwt,
         expiration: token.expirationDate.valueOf(),
