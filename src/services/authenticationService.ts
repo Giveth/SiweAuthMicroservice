@@ -12,7 +12,7 @@ export const generateAccessToken = async (
 ): Promise<AccessToken> => {
   const jti = `${new Date().getTime()}-${generateRandomString(5)}`;
 
-  const expirationDate = moment().add(1, 'hour');
+  const expirationDate = moment().add(30, 'days');
 
   // add unique secrets per service ****
   const jwt = generateJwt({
