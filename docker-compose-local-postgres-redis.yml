@@ -4,6 +4,7 @@ services:
   siwe-microservice-postgress:
     image: postgres:14.2-bullseye
     container_name: siwe-microservice-postgress
+    restart: always
     environment:
       - POSTGRES_DB=microservices
       - POSTGRES_USER=postgres
@@ -19,6 +20,7 @@ services:
     # For running application use above container
     image: postgres:14.2-bullseye
     container_name: siwe-microservice-postgress-test
+    restart: always
     environment:
       - POSTGRES_DB=microservices
       - POSTGRES_USER=postgres
