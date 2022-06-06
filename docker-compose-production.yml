@@ -9,7 +9,7 @@ services:
     # 1. docker-compose -f docker-compose-production.yml pull
     # 2. docker-compose -f docker-compose-production.yml down
     # 3. docker-compose -f docker-compose-production.yml up -d
-    image: ghcr.io/giveth/siweauthmicroservice:production
+    image: ghcr.io/giveth/siweauthmicroservice:main
     restart: always
     environment:
       - NODE_ENV=production
