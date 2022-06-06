@@ -19,6 +19,7 @@
     "prettify": "prettier  --write '**/*.ts*'",
     "db:migrate:run:local": "NODE_ENV=development npx typeorm-ts-node-esm migration:run -d ./src/dataSource.ts ",
     "db:migrate:run:staging": "NODE_ENV=staging npx typeorm-ts-node-esm migration:run -d ./src/dataSource.ts ",
+    "db:migrate:run:production": "NODE_ENV=production npx typeorm-ts-node-esm migration:run -d ./src/dataSource.ts ",
     "db:migrate:revert:local": "NODE_ENV=development npx typeorm-ts-node-esm migration:revert -d ./src/dataSource.ts ",
     "db:migrate:run:test": "NODE_ENV=test npx typeorm-ts-node-esm migration:run -d ./src/dataSource.ts ",
     "db:migrate:revert:test": "NODE_ENV=test npx typeorm-ts-node-esm migration:revert -d ./src/dataSource.ts "
