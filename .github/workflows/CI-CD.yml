@@ -78,7 +78,7 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         uses: garygrossgarten/github-action-ssh@v0.6.4
         with:
-          command: cd SiweAuthMicroservice && git checkout staging && git pull &&  docker-compose -f docker-compose-develop.yml pull && docker-compose -f docker-compose-develop.yml down && docker-compose -f docker-compose-develop.yml up -d && docker image prune -a --force;
+          command: cd SiweAuthMicroservice && git checkout develop && git pull &&  docker-compose -f docker-compose-develop.yml pull && docker-compose -f docker-compose-develop.yml down && docker-compose -f docker-compose-develop.yml up -d && docker image prune -a --force;
           host: ${{ secrets.DEVELOP_HOST }}
           username: ${{ secrets.DEVELOP_USERNAME }}
           privateKey: ${{ secrets.DEVELOP_PRIVATE_KEY}}
