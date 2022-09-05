@@ -74,7 +74,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     steps:
-      - name: Staging deploy
+      - name: Develop deploy
         if: github.ref == 'refs/heads/develop'
         uses: garygrossgarten/github-action-ssh@v0.6.4
         with:
