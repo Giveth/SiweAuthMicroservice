@@ -18,11 +18,12 @@ typeorm migration:create ./migrations/createAccessTokenTable
 #### Then you need to run the migrations like so:
 
 ```
-npm run typeorm:cli -- migration:run
+npm run db:migrate:run:local
 ```
 
 #### If you want to revert last migration :
 
 ```
-npm run typeorm:cli -- migration:revert
+npm run db:migrate:revert:local
+
 ```

@@ -1,9 +1,10 @@
 import 'reflect-metadata';
 import dotenv from 'dotenv';
 import * as path from 'path';
-dotenv.config({
+const x= dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
 });
+console.log('process.env ',x)
 import { DataSource } from 'typeorm';
 import { entities } from './entities';
 
