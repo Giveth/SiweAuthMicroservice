@@ -27,6 +27,7 @@ export class AuthenticationController {
         throw new StandardError(errorMessagesEnum.NONCE_INVALID);
 
       if (whitelistedNonce.isExpired()) {
+        logger.info('POST authenticate, whitelistedNonce is expired', whitelistedNonce)
         await SiweNonce.delete({ id: whitelistedNonce.id });
         throw new StandardError(errorMessagesEnum.NONCE_EXPIRED);
       }
