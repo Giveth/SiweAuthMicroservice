@@ -1,48 +1,26 @@
 import dotenv from 'dotenv';
 import * as path from 'path';
-import { initServer } from '../src/server';
+import { dbConnection, initDbConnection, initServer } from '../src/server';
 import { AppDataSource } from '../src/dataSource';
-import { assert } from 'chai';
 import { SiweNonce } from '../src/entities/siweNonce';
 
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.NODE_ENV || ''}.env`),
 });
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { dropdb, createdb } = require('pgtools');
 
 async function dropDatabaseAndCreateFreshOne() {
-  const config = {
-    user: process.env.TYPEORM_DATABASE_USER,
-    password: process.env.TYPEORM_DATABASE_PASSWORD,
-    port: process.env.TYPEORM_DATABASE_PORT,
-    host: process.env.TYPEORM_DATABASE_HOST,
-  };
-
   // tslint:disable-next-line:no-console
   console.log('Dropping DB');
   try {
-    await dropdb(config, process.env.TYPEORM_DATABASE_NAME);
+    await AppDataSource.synchronize(true);
   } catch (e) {
     // tslint:disable-next-line:no-console
     console.log('drop db error', e);
   }
-
-  // tslint:disable-next-line:no-console
-  console.log('Create Fresh DB');
-  try {
-    await createdb(config, process.env.TYPEORM_DATABASE_NAME);
-    console.log('Fresh DB has been created');
-  } catch (e) {
-    // tslint:disable-next-line:no-console
-    console.log('Create Fresh db error', e);
-  }
 }
 
 async function runMigrations() {
-  await (
-    await AppDataSource.initialize()
-  ).runMigrations({
+  await dbConnection.runMigrations({
     transaction: 'all',
   });
   console.log('Migrations has been executed successfully');
@@ -55,6 +33,7 @@ const seedDb = async () => {
 
 before(async () => {
   try {
+    await initDbConnection();
     await dropDatabaseAndCreateFreshOne();
     await runMigrations();
     await seedDb();
