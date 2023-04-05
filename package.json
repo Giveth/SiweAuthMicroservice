@@ -9,11 +9,11 @@
     "swagger": "tsoa spec",
     "prebuild": "npm run swagger",
     "start": "NODE_ENV=development ts-node-dev --project ./tsconfig.json --respawn ./src/index.ts",
-    "test": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts  ./src/**/*.test.ts  ./src/**/**/*.test.ts",
-    "test:applicationRepository": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts  ./src/repositories/applicationRepository.test.ts ",
-    "test:organizationRepository": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts   ./src/repositories/organizationRepository.test.ts",
-    "test:tokenRouter": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts   ./src/routes/v1/tokenRouter.test.ts",
-    "test:donationRouter": "NODE_ENV=test mocha  -t 30000 --exit -r ts-node/register ./test/pre-test-scripts.ts   ./src/routes/v1/donationRouter.test.ts",
+    "test": "NODE_ENV=test mocha  -t 30000 --exit ./test/pre-test-scripts.ts  ./src/**/*.test.ts  ./src/**/**/*.test.ts",
+    "test:applicationRepository": "NODE_ENV=test mocha  -t 30000 --exit ./test/pre-test-scripts.ts  ./src/repositories/applicationRepository.test.ts ",
+    "test:organizationRepository": "NODE_ENV=test mocha  -t 30000 --exit ./test/pre-test-scripts.ts   ./src/repositories/organizationRepository.test.ts",
+    "test:tokenRouter": "NODE_ENV=test mocha  -t 30000 --exit ./test/pre-test-scripts.ts   ./src/routes/v1/tokenRouter.test.ts",
+    "test:donationRouter": "NODE_ENV=test mocha  -t 30000 --exit ./test/pre-test-scripts.ts   ./src/routes/v1/donationRouter.test.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "prettify": "prettier  --write '**/*.ts*'",
@@ -63,7 +63,7 @@
     "reflect-metadata": "^0.1.13",
     "siwe": "^1.1.6",
     "swagger-ui-express": "^4.3.0",
-    "tsoa": "^3.14.1",
+    "tsoa": "^5.1.1",
     "typeorm": "0.3.11"
   },
   "devDependencies": {
@@ -89,7 +89,9 @@
     "sinon": "^13.0.1",
     "ts-node": "10.7.0",
     "ts-node-dev": "1.1.8",
-    "typescript": "4.5.2"
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "4.5.2",
+    "typescript-transform-paths": "^3.4.6"
   },
   "overrides": {
     "siwe": {

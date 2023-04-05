@@ -45,8 +45,9 @@ jobs:
         run: npm run db:migrate:run:test
       - name: Run tests
         run: npm run test
-
-
+        env:
+          GITCOIN_API_KEY: ${{ secrets.GITCOIN_API_KEY }}
+          GITCOIN_COMMUNITY_ID: ${{ secrets.GITCOIN_COMMUNITY_ID }}
 
   publish:
     if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging'
