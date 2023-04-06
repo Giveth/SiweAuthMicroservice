@@ -7,7 +7,7 @@ const privateKey = process.env.PRIVATE_ETHERS_TEST_KEY as string;
 const publicKey = process.env.PUBLIC_ETHERS_TEST_KEY as string;
 const provider = ethers.getDefaultProvider();
 
-describe('/authentication test cases', authenticationTestCases);
+describe('/passport authentication test cases', authenticationTestCases);
 
 function authenticationTestCases() {
   it('should return the public address', async () => {
