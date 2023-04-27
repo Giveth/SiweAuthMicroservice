@@ -52,7 +52,8 @@ function createBunyanLogger() {
       const esStream = new Elasticsearch({
         indexPattern: '[logstash-]YYYY.MM.DD',
         type: 'logs',
-        host: process.env.ELASTICSEARCH_HOST as string
+        host: process.env.ELASTICSEARCH_HOST as string,
+        httpAuth: process.env.ELATICSEARCH_AUTH as string
       });
       bunyanStreams.push({
         stream: esStream,
