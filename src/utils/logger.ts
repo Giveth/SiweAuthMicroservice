@@ -1,5 +1,5 @@
 import RotatingFileStream from 'bunyan-rotating-file-stream';
-
+import elasticsearch from 'elasticsearch';
 import { createLogger, levelFromName, DEBUG, LogLevelString } from 'bunyan';
 import { ElasticsearchStream } from '../utils/ElasticStream';
 
@@ -37,12 +37,12 @@ function createBunyanLogger() {
       logger.error('ELASTICSEARCH_HOST is not defined');
     } else {
 
-      if (!process.env.ELATICSEARCH_AUTH) {
+      if (!process.env.ELASTICSEARCH_AUTH) {
         logger.error('ELATICSEARCH_AUTH is not defined');
       }
         else {
         const client = new elasticsearch.Client({
-          host: process.env.ELATICSEARCH_HOST as string,
+          host: process.env.ELASTICSEARCH_HOST as string,
           httpAuth: process.env.ELATICSEARCH_AUTH as string,
           ssl: {
             rejectUnauthorized: false
