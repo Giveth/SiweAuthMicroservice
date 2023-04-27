@@ -49,23 +49,24 @@ function createBunyanLogger() {
           },
           httpAgent: agent
         });
-      const esStream = new Elasticsearch({
-        indexPattern: '[logstash-]YYYY.MM.DD',
-        type: 'logs',
-        host: process.env.ELASTICSEARCH_HOST as string,
-        httpAuth: process.env.ELATICSEARCH_AUTH as string
-      });
-      bunyanStreams.push({
-        stream: esStream,
-      });
+        const esStream = new Elasticsearch({
+          indexPattern: '[logstash-]YYYY.MM.DD',
+          type: 'logs',
+          host: process.env.ELASTICSEARCH_HOST as string,
+          httpAuth: process.env.ELATICSEARCH_AUTH as string
+        });
+        bunyanStreams.push({
+          stream: esStream,
+        });
+      }
     }
+    return createLogger({
+      name: 'siwe_microservice',
+      level: levelFromName[process.env.LOG_LEVEL as LogLevelString] || DEBUG,
+      // level :process.env.LOG_LEVEL | 'error',
+      streams: bunyanStreams,
+    });
   }
-  return createLogger({
-    name: 'siwe_microservice',
-    level: levelFromName[process.env.LOG_LEVEL as LogLevelString] || DEBUG,
-    // level :process.env.LOG_LEVEL | 'error',
-    streams: bunyanStreams,
-  });
 }
 
 export const logger = createBunyanLogger();
