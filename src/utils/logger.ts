@@ -36,28 +36,26 @@ function createBunyanLogger() {
     if (!process.env.ELASTICSEARCH_HOST) {
       logger.error('ELASTICSEARCH_HOST is not defined');
     } else {
+      // const auth = process.env.ELATICSEARCH_AUTH as string;
+      // const encodedAuth = Buffer.from(auth).toString('base64');
+      // const agent = new HttpsAgent({
+      //   rejectUnauthorized: false,
+      //   auth: encodedAuth
+      // });
 
-      if (!process.env.ELATICSEARCH_AUTH) {
-        logger.error('ELATICSEARCH_AUTH is not defined');
-      }
-        else {
-        const client = new elasticsearch.Client({
-          host: process.env.ELATICSEARCH_HOST as string,
-          httpAuth: process.env.ELATICSEARCH_AUTH as string,
-          ssl: {
-            rejectUnauthorized: false
-          },
-          httpAgent: agent
-        });
       const esStream = new Elasticsearch({
         indexPattern: '[logstash-]YYYY.MM.DD',
         type: 'logs',
-        host: process.env.ELASTICSEARCH_HOST as string
+        host: process.env.ELASTICSEARCH_HOST as string,
+        httpAuth: process.env.ELATICSEARCH_AUTH as string,
+        ssl: {
+          rejectUnauthorized: false
+        },
+        httpAgent: false
       });
       bunyanStreams.push({
         stream: esStream,
       });
-    }
   }
 }
   return createLogger({
