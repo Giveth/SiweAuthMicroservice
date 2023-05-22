@@ -49,15 +49,15 @@ function createBunyanLogger() {
         host: process.env.ELASTICSEARCH_HOST as string,
         httpAuth: process.env.ELATICSEARCH_AUTH as string,
         ssl: {
-          rejectUnauthorized: false
+          rejectUnauthorized: false,
         },
-        httpAgent: false
+        httpAgent: false,
       });
       bunyanStreams.push({
         stream: esStream,
       });
+    }
   }
-}
   return createLogger({
     name: 'siwe_microservice',
     level: levelFromName[process.env.LOG_LEVEL as LogLevelString] || DEBUG,
