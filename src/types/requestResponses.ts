@@ -6,6 +6,12 @@ export type AuthenticationRequest = {
   nonce: string;
 };
 
+export type PassportAuthenticationRequest = {
+  signature: string;
+  message: string;
+  nonce: string;
+};
+
 export type AuthorizationRequest = {
   siwe: any;
   expiration: Date;

@@ -12,10 +12,10 @@ type nonceResponse = {
 export class NonceController {
   @Get('/')
   public async getNonce(): Promise<nonceResponse> {
-    const nonceLife = Number(process.env.NONCE_LIFE_MINUTES) || 5
+    const nonceLife = Number(process.env.NONCE_LIFE_MINUTES) || 5;
     const nonce = await SiweNonce.create({
       nonce: generateNonce(),
-      expirationDate: moment().add(nonceLife, 'minutes'),
+      expirationDate: moment().add(nonceLife, 'minutes').toDate(),
     }).save();
 
     return {

@@ -82,4 +82,31 @@ export const errorMessagesEnum = {
     httpStatusCode: 400,
     code: 2003,
   },
+
+  PASSPORT_INVALID_SIGNATURE: {
+    message: 'Invalid signature for nonce',
+    httpStatusCode: 400,
+    code: 2004,
+  },
+
+  PASSPORT_ERROR: {
+    message: 'Error authenticating passport',
+    httpStatusCode: 400,
+    code: 2005,
+  },
+  PASSPORT_BAD_REQUEST: {
+    message: 'Passport bad request',
+    httpStatusCode: 400,
+    code: 2006,
+  },
+  PASSPORT_UNAUTHORIZED: {
+    message: 'Passport unauthorized',
+    httpStatusCode: 401,
+    code: 2007,
+  },
+  PASSPORT_NOT_FOUND: {
+    message: 'Passport not found',
+    httpStatusCode: 404,
+    code: 2008,
+  },
 };
