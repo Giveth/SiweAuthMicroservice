@@ -1,6 +1,7 @@
 import RotatingFileStream from 'bunyan-rotating-file-stream';
 
 import { createLogger, levelFromName, DEBUG, LogLevelString } from 'bunyan';
+const Elasticsearch = require('bunyan-elasticsearch');
 
 function createBunyanLogger() {
   const logDir = process.env.LOG_PATH || './logs/siwe_microservice.log';
@@ -29,6 +30,33 @@ function createBunyanLogger() {
     bunyanStreams.push({
       stream: process.stdout,
     });
+  }
+
+  if (process.env.ENABLE_ELASTICSEARCH_LOG === 'true') {
+    if (!process.env.ELASTICSEARCH_HOST) {
+      logger.error('ELASTICSEARCH_HOST is not defined');
+    } else {
+      // const auth = process.env.ELATICSEARCH_AUTH as string;
+      // const encodedAuth = Buffer.from(auth).toString('base64');
+      // const agent = new HttpsAgent({
+      //   rejectUnauthorized: false,
+      //   auth: encodedAuth
+      // });
+
+      const esStream = new Elasticsearch({
+        indexPattern: '[logstash-]YYYY.MM.DD',
+        type: 'logs',
+        host: process.env.ELASTICSEARCH_HOST as string,
+        httpAuth: process.env.ELATICSEARCH_AUTH as string,
+        ssl: {
+          rejectUnauthorized: false,
+        },
+        httpAgent: false,
+      });
+      bunyanStreams.push({
+        stream: esStream,
+      });
+    }
   }
   return createLogger({
     name: 'siwe_microservice',
