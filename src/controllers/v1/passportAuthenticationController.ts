@@ -38,7 +38,7 @@ export class PassportAuthenticationController {
           address,
           nonce,
           signature,
-          community: process.env.GITCOIN_COMMUNITY_ID,
+          scorer_id: process.env.GITCOIN_COMMUNITY_ID,
         },
         { headers: getPassportRequestHeaders() },
       );

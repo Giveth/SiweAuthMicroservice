@@ -3,6 +3,6 @@ export const getPassportRequestHeaders = (): {
 } => {
   return {
     accept: 'application/json',
-    'X-Api-Key': process.env.GITCOIN_API_KEY,
+    'X-API-KEY': process.env.GITCOIN_API_KEY,
   };
 };
