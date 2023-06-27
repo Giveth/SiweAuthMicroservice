@@ -39,7 +39,11 @@ export class PassportAuthenticationController {
           address,
           scorer_id: process.env.GITCOIN_COMMUNITY_ID,
         },
-        { headers: getPassportRequestHeaders() },
+        {
+          headers: {
+            'X-API-KEY': process.env.GITCOIN_API_KEY,
+          }
+        },
       );
     } catch (e) {
       logger.error('POST authenticate, passport authentication failed', e);
@@ -55,14 +59,6 @@ export class PassportAuthenticationController {
       case 200:
       default:
         break;
-    }
-
-    if (response.data.status !== 'PROCESSING') {
-      logger.error(
-        'POST authenticate, passport authentication failed',
-        response.data,
-      );
-      throw new StandardError(errorMessagesEnum.PASSPORT_ERROR);
     }
 
     const token = await generateAccessToken({ address }, true);
