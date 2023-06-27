@@ -42,7 +42,7 @@ export class PassportAuthenticationController {
         {
           headers: {
             'X-API-KEY': process.env.GITCOIN_API_KEY,
-          }
+          },
         },
       );
     } catch (e) {
