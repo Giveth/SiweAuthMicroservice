@@ -29,6 +29,7 @@ export class PassportAuthenticationController {
     } catch (e) {
       throw new StandardError(errorMessagesEnum.PASSPORT_INVALID_SIGNATURE);
     }
+    logger.info("Logging address: ", address);
 
     let response: AxiosResponse;
     try {
@@ -36,8 +37,6 @@ export class PassportAuthenticationController {
         'https://api.scorer.gitcoin.co/registry/submit-passport',
         {
           address,
-          nonce,
-          signature,
           scorer_id: process.env.GITCOIN_COMMUNITY_ID,
         },
         { headers: getPassportRequestHeaders() },
