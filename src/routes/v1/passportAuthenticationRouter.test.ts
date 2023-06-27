@@ -8,7 +8,7 @@ const publicKey = process.env.PUBLIC_ETHERS_TEST_KEY as string;
 const provider = ethers.getDefaultProvider();
 
 // describe('/passport authentication test cases', authenticationTestCases);
-
+// Testing Passport
 // function authenticationTestCases() {
 //   it('should return the public address', async () => {
 //     const nonceResult: AxiosResponse = await axios.get(
