@@ -29,7 +29,7 @@ export class PassportAuthenticationController {
     } catch (e) {
       throw new StandardError(errorMessagesEnum.PASSPORT_INVALID_SIGNATURE);
     }
-    logger.info("Logging address: ", address);
+    logger.info('Logging address: ', address);
 
     let response: AxiosResponse;
     try {
