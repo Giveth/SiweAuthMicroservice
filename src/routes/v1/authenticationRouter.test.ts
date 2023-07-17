@@ -1,14 +1,9 @@
 import axios from 'axios';
-import {
-  generateRandomEthereumAddress,
-  serverUrl,
-} from '../../../test/testUtils';
+import { serverUrl } from '../../../test/testUtils';
 import { assert } from 'chai';
 import { SiweNonce } from '../../entities/siweNonce';
 import { generateNonce } from 'siwe';
 import moment from 'moment';
-import sinon from 'sinon';
-import { SiweMessage } from 'siwe';
 import { ethers } from 'ethers';
 
 const siwe = require('siwe');
@@ -25,7 +20,7 @@ function authenticationTestCases() {
   it('should return the public address, jwt and expiration', async () => {
     const nonce = await SiweNonce.create({
       nonce: generateNonce(),
-      expirationDate: moment().add(5, 'minutes'),
+      expirationDate: moment().add(5, 'minutes').toDate(),
     }).save();
 
     const wallet = new ethers.Wallet(privateKey, provider);

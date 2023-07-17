@@ -5,6 +5,7 @@ export type JwtPayload = {
   publicAddress: string;
   expirationDate: Date;
   jti: string;
+  isPassport?: boolean;
 };
 
 export const generateJwt = (payload: JwtPayload): string => {

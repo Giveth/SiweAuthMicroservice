@@ -1,10 +1,7 @@
 import axios from 'axios';
-import {
-  generateRandomEthereumAddress,
-  serverUrl,
-} from '../../../test/testUtils';
+import { generateRandomEthereumAddress, serverUrl } from '@/test/testUtils';
 import { assert } from 'chai';
-import { generateAccessToken } from '../../services/authenticationService';
+import { generateAccessToken } from '@/src/services/authenticationService';
 
 describe('/authorization test cases', authorizationTestCases);
 
