@@ -78,12 +78,17 @@ jobs:
   deploy:
     needs: publish
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
-      - name: Staging deploy
-        uses: garygrossgarten/github-action-ssh@v0.6.4
+      - name: SSH and Redeploy
+        uses: appleboy/ssh-action@v1.0.0
         with:
-          command: cd SiweAuthMicroservice && git checkout staging && git fetch && git reset --hard origin/staging &&  docker-compose -f docker-compose-staging.yml pull && docker-compose -f docker-compose-staging.yml down && docker-compose -f docker-compose-staging.yml up -d && docker image prune -a --force;
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USERNAME }}
-          privateKey: ${{ secrets.STAGING_PRIVATE_KEY}}
+          host: ${{ secrets.STAGING_HOST_ALL }}
+          username: ${{ secrets.STAGING_USERNAME_ALL }}
+          key: ${{ secrets.STAGING_PRIVATE_KEY_ALL }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd giveth-all
+            docker-compose stop auth
+            docker-compose pull auth
+            docker-compose up -d auth
+            docker image prune -a --force
