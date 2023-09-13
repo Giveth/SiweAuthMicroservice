@@ -6,6 +6,12 @@ export type AuthenticationRequest = {
   nonce: string;
 };
 
+export type MultisigAuthenticationRequest = {
+  transactionHash: string;
+  message: string;
+  network: number;
+};
+
 export type PassportAuthenticationRequest = {
   signature: string;
   message: string;
@@ -21,6 +27,14 @@ export type AuthenticationResponse = {
   jwt: string;
   expiration: number;
   publicAddress: string;
+};
+
+export type MultisigAuthenticationResponse = {
+  jwt?: string;
+  expiration?: number;
+  publicAddress?: string;
+  status: string;
+  pendingConfirmation: number;
 };
 
 export type AuthorizationResponse = AuthenticationResponse;
