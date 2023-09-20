@@ -46,6 +46,12 @@ export const errorMessagesEnum = {
     code: 1000,
   },
 
+  MULTISIG_SESSION_NOT_FOUND: {
+    message: 'Access token not found',
+    httpStatusCode: 401,
+    code: 1000,
+  },
+
   UNAUTHORIZED: {
     message: 'unAuthorized',
     httpStatusCode: 401,
@@ -87,6 +93,12 @@ export const errorMessagesEnum = {
     message: 'Invalid signature for nonce',
     httpStatusCode: 400,
     code: 2004,
+  },
+
+  NOT_SAFE_OWNER: {
+    message: 'User requesting access, is not part of the multisig safe',
+    httpStatusCode: 403,
+    code: 1004,
   },
 
   PASSPORT_ERROR: {

@@ -6,10 +6,10 @@ import { MultisigAuthenticationController } from '@/src/controllers/v1/multisigA
 export const multisigAuthenticationRouter = express.Router();
 const multisigAuthenticationController = new MultisigAuthenticationController();
 multisigAuthenticationRouter.post(
-  '/passportAuthentication',
+  '/multisigAuthentication',
   async (req: Request, res: Response, next) => {
     try {
-      const { transactionHash, message, network } = req.body;
+      const { transactionHash, message, network, jwt } = req.body;
       if (!transactionHash || !message || !network) {
         res.status(422).json({ message: errorMessagesEnum.MISSING_LOGIN_DATA });
         return;
@@ -19,6 +19,7 @@ multisigAuthenticationRouter.post(
         transactionHash,
         message,
         network,
+        jwt,
       });
       res.send(result);
     } catch (e) {

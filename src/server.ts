@@ -7,7 +7,10 @@ import bodyParser from 'body-parser';
 import { errorHandler } from './middlewares/errorHandler';
 import { adminJsRootPath, getAdminBroRouter } from './routes/v1/adminbroRouter';
 import { logger } from './utils/logger';
-
+import { getProvider, getSafeTransactionNetworkUrl } from './utils/provider';
+import { EthersAdapter } from '@safe-global/protocol-kit';
+import { ethers } from 'ethers';
+import SafeApiKit from '@safe-global/api-kit';
 // tslint:disable:no-var-requires
 const cors = require('cors');
 const whitelistHostnames: string[] = (
@@ -54,6 +57,24 @@ export const initServer = async () => {
     },
   };
   app.use(cors(corsOptions));
+
+  // const provider = getProvider(100);
+
+  // const ethAdapter = new EthersAdapter({
+  //   ethers,
+  //   signerOrProvider: provider,
+  // });
+
+  // const safeService = new SafeApiKit({
+  //   txServiceUrl: getSafeTransactionNetworkUrl(100),
+  //   ethAdapter,
+  // });
+
+  // const safeMultisigTransactionResponse = await safeService.getTransaction(
+  //   '0x859d6268bb7bc3f99b2a0236b388d0e7e577889fdf1a1c68461489bf665dcae5',
+  // );
+
+  // const safeInfo = await safeService.getSafeInfo(safeMultisigTransactionResponse.safe)
 
   app.use(express.static('public'));
   app.use(bodyParser.json());

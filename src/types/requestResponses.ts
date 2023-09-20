@@ -10,6 +10,13 @@ export type MultisigAuthenticationRequest = {
   transactionHash: string;
   message: string;
   network: number;
+  jwt: string;
+};
+
+export type MultisigAuthorizationRequest = {
+  multisigAddress: string;
+  network: number;
+  jwt: string;
 };
 
 export type PassportAuthenticationRequest = {
@@ -34,7 +41,6 @@ export type MultisigAuthenticationResponse = {
   expiration?: number;
   publicAddress?: string;
   status: string;
-  pendingConfirmation: number;
 };
 
 export type AuthorizationResponse = AuthenticationResponse;
