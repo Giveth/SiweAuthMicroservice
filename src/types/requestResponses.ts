@@ -7,8 +7,8 @@ export type AuthenticationRequest = {
 };
 
 export type MultisigAuthenticationRequest = {
-  transactionHash: string;
-  message: string;
+  safeMessageTimestamp: number;
+  safeAddress: string;
   network: number;
   jwt: string;
 };

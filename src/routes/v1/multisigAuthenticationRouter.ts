@@ -9,15 +9,15 @@ multisigAuthenticationRouter.post(
   '/multisigAuthentication',
   async (req: Request, res: Response, next) => {
     try {
-      const { transactionHash, message, network, jwt } = req.body;
-      if (!transactionHash || !message || !network) {
+      const { safeMessageTimestamp, safeAddress, network, jwt } = req.body;
+      if (!safeMessageTimestamp || !safeAddress || !jwt || !network) {
         res.status(422).json({ message: errorMessagesEnum.MISSING_LOGIN_DATA });
         return;
       }
 
       const result = await multisigAuthenticationController.authenticate({
-        transactionHash,
-        message,
+        safeMessageTimestamp,
+        safeAddress,
         network,
         jwt,
       });

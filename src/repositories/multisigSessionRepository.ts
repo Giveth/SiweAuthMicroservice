@@ -2,8 +2,7 @@ import moment from 'moment';
 import { MultisigSession } from '../entities/multisigSession';
 
 export const firstOrCreateMultisigSession = async (
-  safeTransactionHash: string,
-  safeTransactionMessage: string,
+  safeMessageHash: string,
   multisigAddress: string,
   network: number,
 ) => {
@@ -16,8 +15,7 @@ export const firstOrCreateMultisigSession = async (
 
   multisigSession = MultisigSession.create({
     expirationDate: moment().add(1, 'week').toDate(),
-    safeTransactionHash,
-    safeTransactionMessage,
+    safeMessageHash,
     multisigAddress,
     network,
     active: true,

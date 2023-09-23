@@ -1,31 +1,16 @@
-import { SiweMessage } from 'siwe';
 import { Route, Tags, Post, Body } from 'tsoa';
-import SafeApiKit from '@safe-global/api-kit';
 import {
-  AuthenticationRequest,
-  AuthenticationResponse,
-  MultisigAuthenticationRequest,
   MultisigAuthenticationResponse,
   MultisigAuthorizationRequest,
 } from '../../types/requestResponses';
 import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
-import {
-  getProvider,
-  getSafeTransactionNetworkUrl,
-} from '@/src/utils/provider';
-import { EthersAdapter } from '@safe-global/protocol-kit';
-import { ethers } from 'ethers';
-import { MultisigSession } from '@/src/entities/multisigSession';
-import moment from 'moment';
+import { MultisigStatuses } from '@/src/entities/multisigSession';
 import { generateAccessToken } from '@/src/services/authenticationService';
-import { verify } from 'jsonwebtoken';
-import { findAccessTokenByUniqueIdentifiers } from '@/src/repositories/accessTokenRepository';
-import {
-  findNonExpiredMultisigSessions,
-  firstOrCreateMultisigSession,
-} from '@/src/repositories/multisigSessionRepository';
+import { findNonExpiredMultisigSessions } from '@/src/repositories/multisigSessionRepository';
+import { fetchSafeMessage, getSafeApiKit } from '@/src/services/safeServices';
+import { validateJwt } from '@/src/services/jwtService';
 
 @Route('/v1/multisigAuthorization')
 @Tags('Authorization')
@@ -36,15 +21,7 @@ export class MultisigAuthorizationController {
   ): Promise<MultisigAuthenticationResponse> {
     try {
       let token: any;
-      const provider = getProvider(body.network);
-      const ethAdapter = new EthersAdapter({
-        ethers,
-        signerOrProvider: provider,
-      });
-      const safeService = new SafeApiKit({
-        txServiceUrl: getSafeTransactionNetworkUrl(body.network),
-        ethAdapter,
-      });
+      const safeService = await getSafeApiKit(body.network);
 
       const multisigSession = await findNonExpiredMultisigSessions(
         body.multisigAddress,
@@ -54,31 +31,27 @@ export class MultisigAuthorizationController {
       if (!multisigSession)
         throw new StandardError(errorMessagesEnum.MULTISIG_SESSION_NOT_FOUND);
 
-      const safeMultisigTransactionResponse = await safeService.getTransaction(
-        multisigSession.safeTransactionHash,
+      const safeInfo = await safeService.getSafeInfo(
+        multisigSession.multisigAddress,
       );
 
-      const safeAddress = safeMultisigTransactionResponse.safe;
-      const safeInfo = await safeService.getSafeInfo(safeAddress);
-
-      const verifiedJwt = verify(
-        body.jwt,
-        process.env.JWT_SECRET as string,
-      ) as any;
-
-      const dbAccessToken = await findAccessTokenByUniqueIdentifiers(
-        body.jwt,
-        verifiedJwt.jti,
-      );
-
-      if (!dbAccessToken)
-        throw new StandardError(errorMessagesEnum.JWT_NOT_FOUND);
+      const verifiedJwt = await validateJwt(body.jwt);
 
       if (!safeInfo.owners.includes(verifiedJwt.publicAddress))
         throw new StandardError(errorMessagesEnum.NOT_SAFE_OWNER);
 
-      if (safeMultisigTransactionResponse.isSuccessful) {
-        token = await generateAccessToken({ address: safeAddress });
+      const safeMessage = await fetchSafeMessage(
+        multisigSession.safeMessageHash,
+        body.network,
+      );
+
+      if (
+        multisigSession.multisigStatus(safeMessage) ===
+        MultisigStatuses.Successful
+      ) {
+        token = await generateAccessToken({
+          address: multisigSession.multisigAddress,
+        });
         logger.info(
           `Multisig with address ${multisigSession.multisigAddress} logged in`,
         );
@@ -88,9 +61,7 @@ export class MultisigAuthorizationController {
         jwt: token?.jwt,
         expiration: multisigSession.expirationDate.valueOf(),
         publicAddress: multisigSession.multisigAddress,
-        status: multisigSession.multisigStatus(
-          safeMultisigTransactionResponse?.isSuccessful,
-        ),
+        status: multisigSession.status,
       };
     } catch (e) {
       logger.error('multisigAuthenticationController error', e);

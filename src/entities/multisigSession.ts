@@ -25,8 +25,13 @@ export class MultisigSession extends BaseEntity {
   @Column({ nullable: true })
   multisigAddress: string;
 
+  @Index()
   @Column({ nullable: false })
-  safeTransactionMessage: string;
+  safeMessageHash: string;
+
+  @Index()
+  @Column({ nullable: false })
+  messageHash: string;
 
   @Index()
   @Column({ nullable: false })
@@ -38,6 +43,13 @@ export class MultisigSession extends BaseEntity {
 
   @Column({ nullable: false, default: true })
   active: boolean;
+
+  // https://docs.safe.global/safe-smart-account/signatures/eip-1271#fetching-the-signature-asynchronously
+  // A fully signed message will have the status CONFIRMED,
+  // confirmationsSubmitted >= confirmationsRequired
+  // and a preparedSignature !== null.
+  @Column({ nullable: true, default: MultisigStatuses.Pending })
+  status: string;
 
   @Column({ nullable: false })
   expirationDate: Date;
@@ -56,8 +68,9 @@ export class MultisigSession extends BaseEntity {
     return this.expirationDate.valueOf() < moment().valueOf();
   }
 
-  multisigStatus(isSuccessful?: boolean): string {
-    if (isSuccessful) return MultisigStatuses.Successful;
+  multisigStatus(safeMessageData: any): string {
+    if (this.isExpired()) return MultisigStatuses.Failed;
+    if (safeMessageData.status) return MultisigStatuses.Successful;
 
     return MultisigStatuses.Pending;
   }
