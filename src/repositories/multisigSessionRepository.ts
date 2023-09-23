@@ -28,9 +28,9 @@ export const findNonExpiredMultisigSessions = async (
   multisigAddress: string,
   network: number,
 ) => {
-  const session = await MultisigSession.createQueryBuilder('multisigSession')
-    .where('multisigSession.network = :network', { network })
-    .andWhere('multisigSession."multisigAddress" = :multisigAddress', {
+  const session = await MultisigSession.createQueryBuilder()
+    .where('network = :network', { network })
+    .andWhere('"multisigAddress" = :multisigAddress', {
       multisigAddress,
     })
     .getOne();
