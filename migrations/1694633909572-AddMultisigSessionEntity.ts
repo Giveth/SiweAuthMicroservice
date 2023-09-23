@@ -30,6 +30,7 @@ export class AddMultisigSessionEntity1694633909572
           {
             name: 'safeTransactionHash',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'network',

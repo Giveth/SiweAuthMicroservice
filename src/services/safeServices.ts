@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import SafeApiKit from '@safe-global/api-kit';
 import { EthersAdapter } from '@safe-global/protocol-kit';
 import { findObjectByClosestTimestamp } from '../utils/utils';
+import axios from 'axios';
 
 export const fetchSafeMessage = async (
   safeMessageHash: string,
@@ -12,14 +13,13 @@ export const fetchSafeMessage = async (
   const chainUrl = getSafeTransactionNetworkUrl(networkId);
 
   try {
-    safeMessage = await fetch(`${chainUrl}/v1/messages/${safeMessageHash}/`, {
-      headers: { 'Content-Type': 'application/json' },
-    }).then(res => {
-      if (!res.ok) {
-        return Promise.reject('Invalid response when fetching SafeMessage');
-      }
-      return res.json();
-    });
+    const response = await axios.get(
+      `${chainUrl}/v1/messages/${safeMessageHash}/`,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+    safeMessage = response.data;
   } catch (e) {
     console.error(e);
   }
@@ -34,20 +34,15 @@ export const fetchSafeMessageByTimestamp = async (
 ) => {
   let safeMessage;
   try {
-    const safeMessages = await fetch(
+    const response = await axios.get(
       `https://safe-client.safe.global/v1/chains/${networkId}/safes/${safeAddress}/messages`,
       {
         headers: { 'Content-Type': 'application/json' },
       },
-    ).then(res => {
-      if (!res.ok) {
-        return Promise.reject('Invalid response when fetching SafeMessage');
-      }
-      return res.json();
-    });
+    );
     safeMessage = findObjectByClosestTimestamp(
       safeMessageTimestamp,
-      safeMessages.results,
+      response.data.results,
     );
   } catch (e) {
     console.error(e);

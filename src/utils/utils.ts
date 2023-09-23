@@ -20,11 +20,13 @@ export const findObjectByClosestTimestamp = (
 ) => {
   if (objects.length === 0) return null;
 
-  let closestObj = objects[0];
+  let dateLabelObjects = objects.filter(item => item.type !== 'DATE_LABEL');
+
+  let closestObj = dateLabelObjects[0];
   let closestTimestamp = closestObj.creationTimestamp;
   let smallestDifference = Math.abs(target - closestTimestamp);
 
-  objects.forEach(obj => {
+  dateLabelObjects.forEach(obj => {
     const difference = Math.abs(target - obj.creationTimestamp);
     if (difference < smallestDifference) {
       smallestDifference = difference;

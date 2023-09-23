@@ -13,6 +13,13 @@ export class UpdateMultisigSessionEntity1695476070385
     const table = await queryRunner.getTable('multisig_session');
     if (!table) return;
 
+    const safeTransactionHashColumnExists = table.columns.some(
+      c => c.name === 'safeTransactionHash',
+    );
+    if (safeTransactionHashColumnExists) {
+      await queryRunner.dropColumn('multisig_session', 'safeTransactionHash');
+    }
+
     // Adding new columns
     const statusColumnExists = table.columns.some(c => c.name === 'status');
     if (!statusColumnExists) {
