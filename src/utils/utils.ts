@@ -20,7 +20,7 @@ export const findObjectByClosestTimestamp = (
 ) => {
   if (objects.length === 0) return null;
 
-  let dateLabelObjects = objects.filter(item => item.type !== 'DATE_LABEL');
+  const dateLabelObjects = objects.filter(item => item.type !== 'DATE_LABEL');
 
   let closestObj = dateLabelObjects[0];
   let closestTimestamp = closestObj.creationTimestamp;
