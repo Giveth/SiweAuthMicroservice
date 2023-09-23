@@ -85,8 +85,8 @@ export class MultisigAuthenticationController {
         (await multisigSession.multisigStatus(safeMessage)) ===
         MultisigStatuses.Successful
       ) {
-        token = await generateAccessToken({ address: safeMessage.safe });
-        logger.info(`Multisig with address ${safeMessage.safe} logged in`);
+        token = await generateAccessToken({ address: body.safeAddress });
+        logger.info(`Multisig with address ${body.safeAddress} logged in`);
       }
 
       return {
