@@ -10,11 +10,9 @@ export const fetchSafeMessage = async (
   networkId: number,
 ) => {
   let safeMessage;
-  const chainUrl = getSafeTransactionNetworkUrl(networkId);
-
   try {
     const response = await axios.get(
-      `${chainUrl}/v1/messages/${safeMessageHash}/`,
+      `https://safe-client.safe.global/v1/chains/${networkId}/messages/${safeMessageHash}`,
       {
         headers: { 'Content-Type': 'application/json' },
       },
