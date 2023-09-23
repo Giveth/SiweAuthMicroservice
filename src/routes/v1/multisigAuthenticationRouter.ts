@@ -9,8 +9,9 @@ multisigAuthenticationRouter.post(
   '/multisigAuthentication',
   async (req: Request, res: Response, next) => {
     try {
-      const { safeMessageTimestamp, safeAddress, network, jwt } = req.body;
-      if (!safeMessageTimestamp || !safeAddress || !jwt || !network) {
+      const { safeAddress, network, jwt } = req.body;
+      const safeMessageTimestamp = req.body?.safeMessageTimestamp;
+      if (!safeAddress || !jwt || !network) {
         res.status(422).json({ message: errorMessagesEnum.MISSING_LOGIN_DATA });
         return;
       }

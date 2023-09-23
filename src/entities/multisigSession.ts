@@ -16,7 +16,6 @@ export enum MultisigStatuses {
 }
 
 @Entity()
-@Index(['safeTransactionHash', 'network'], { unique: true })
 export class MultisigSession extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
@@ -66,7 +65,11 @@ export class MultisigSession extends BaseEntity {
 
     if (this.isExpired()) this.status = MultisigStatuses.Failed;
 
-    if (safeMessageData.status === 'CONFIRMED')
+    if (
+      safeMessageData.status === 'CONFIRMED' &&
+      safeMessageData.confirmationsSubmitted >=
+        safeMessageData.confirmationsRequired
+    )
       this.status = MultisigStatuses.Successful;
 
     await this.save();
