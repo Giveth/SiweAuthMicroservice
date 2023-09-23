@@ -64,10 +64,17 @@ export class MultisigSession extends BaseEntity {
     return this.expirationDate.valueOf() < moment().valueOf();
   }
 
-  multisigStatus(safeMessageData: any): string {
-    if (this.isExpired()) return MultisigStatuses.Failed;
-    if (safeMessageData.status) return MultisigStatuses.Successful;
+  async multisigStatus(safeMessageData: any): Promise<string> {
+    if (!this.isExpired() && safeMessageData.status !== 'CONFIRMED')
+      this.status = MultisigStatuses.Pending;
 
-    return MultisigStatuses.Pending;
+    if (this.isExpired()) this.status = MultisigStatuses.Failed;
+
+    if (safeMessageData.status === 'CONFIRMED')
+      this.status = MultisigStatuses.Successful;
+
+    await this.save();
+
+    return this.status;
   }
 }

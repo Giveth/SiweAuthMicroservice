@@ -7,13 +7,21 @@ import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
 import { generateAccessToken } from '@/src/services/authenticationService';
-import { firstOrCreateMultisigSession } from '@/src/repositories/multisigSessionRepository';
 import {
+  findNonExpiredMultisigSessions,
+  firstOrCreateMultisigSession,
+} from '@/src/repositories/multisigSessionRepository';
+import {
+  fetchSafeMessage,
   fetchSafeMessageByTimestamp,
   getSafeApiKit,
 } from '@/src/services/safeServices';
 import { validateJwt } from '@/src/services/jwtService';
-import { MultisigStatuses } from '@/src/entities/multisigSession';
+import {
+  MultisigSession,
+  MultisigStatuses,
+} from '@/src/entities/multisigSession';
+import moment from 'moment';
 
 @Route('/v1/multisigAuthentication')
 @Tags('Authentication')
@@ -24,34 +32,57 @@ export class MultisigAuthenticationController {
   ): Promise<MultisigAuthenticationResponse> {
     try {
       let token: any;
+      let multisigSession: any;
+      let safeMessage: any;
       const safeService = await getSafeApiKit(body.network);
       const verifiedJwt = await validateJwt(body.jwt);
 
-      const safeMessage = await fetchSafeMessageByTimestamp(
+      multisigSession = await findNonExpiredMultisigSessions(
         body.safeAddress,
-        body.safeMessageTimestamp,
         body.network,
       );
+
+      if (!multisigSession && body.safeMessageTimestamp) {
+        safeMessage = await fetchSafeMessageByTimestamp(
+          body.safeAddress,
+          body.safeMessageTimestamp,
+          body.network,
+        );
+      } else if (multisigSession && !body.safeMessageTimestamp) {
+        safeMessage = await fetchSafeMessage(
+          multisigSession.safeMessageHash,
+          body.network,
+        );
+      } else {
+        throw new StandardError(errorMessagesEnum.MULTISIG_INVALID_REQUEST);
+      }
 
       if (!safeMessage)
         throw new StandardError(errorMessagesEnum.MULTISIG_MESSAGE_NOT_FOUND);
 
       const safeInfo = await safeService.getSafeInfo(body.safeAddress);
 
-      if (safeMessage?.proposedBy?.value !== verifiedJwt.publicAddress)
+      if (
+        !multisigSession &&
+        safeMessage?.proposedBy?.value !== verifiedJwt.publicAddress
+      )
         throw new StandardError(errorMessagesEnum.NOT_SAFE_OWNER);
 
       if (!safeInfo.owners.includes(verifiedJwt.publicAddress))
         throw new StandardError(errorMessagesEnum.NOT_SAFE_OWNER);
 
-      const multisigSession = await firstOrCreateMultisigSession(
-        safeMessage,
-        safeMessage.safe,
-        body.network,
-      );
+      if (!multisigSession) {
+        multisigSession = MultisigSession.create({
+          expirationDate: moment().add(1, 'week').toDate(),
+          safeMessageHash: safeMessage.messageHash,
+          multisigAddress: body.safeAddress,
+          network: body.network,
+          active: true,
+        });
+      }
 
       if (
-        multisigSession.multisigStatus(safeMessage) ===
+        (await multisigSession.multisigStatus(safeMessage)) ===
         MultisigStatuses.Successful
       ) {
         token = await generateAccessToken({ address: safeMessage.safe });
