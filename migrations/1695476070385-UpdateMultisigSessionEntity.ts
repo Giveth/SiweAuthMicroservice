@@ -10,68 +10,80 @@ export class UpdateMultisigSessionEntity1695476070385
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const table = await queryRunner.getTable('multisig_session');
+    if (!table) return;
+
     // Adding new columns
-    await queryRunner.addColumn(
-      'multisig_session',
-      new TableColumn({
-        name: 'messageHash',
-        type: 'varchar',
-        isNullable: false,
-      }),
-    );
-    await queryRunner.addColumn(
-      'multisig_session',
-      new TableColumn({
-        name: 'status',
-        type: 'varchar',
-        isNullable: true,
-      }),
-    );
+    const statusColumnExists = table.columns.some(c => c.name === 'status');
+    if (!statusColumnExists) {
+      await queryRunner.addColumn(
+        'multisig_session',
+        new TableColumn({
+          name: 'status',
+          type: 'varchar',
+          isNullable: true,
+        }),
+      );
+    }
 
     // Renaming column safeTransactionMessage to safeMessageHash
-    await queryRunner.renameColumn(
-      'multisig_session',
-      'safeTransactionMessage',
-      'safeMessageHash',
+    const safeTransactionMessageColumnExists = table.columns.some(
+      c => c.name === 'safeTransactionMessage',
     );
+    if (safeTransactionMessageColumnExists) {
+      await queryRunner.renameColumn(
+        'multisig_session',
+        'safeTransactionMessage',
+        'safeMessageHash',
+      );
+    }
 
-    // Creating indices for messageHash and safeMessageHash
-    await queryRunner.createIndex(
-      'multisig_session',
-      new TableIndex({
-        name: 'IDX_MULTISIG_MESSAGE_HASH',
-        columnNames: ['messageHash'],
-      }),
+    // Creating indices for safeMessageHash
+    const safeMessageHashIndexExists = table.indices.some(
+      idx => idx.columnNames.indexOf('safeMessageHash') !== -1,
     );
-    await queryRunner.createIndex(
-      'multisig_session',
-      new TableIndex({
-        name: 'IDX_MULTISIG_SAFE_MESSAGE_HASH',
-        columnNames: ['safeMessageHash'],
-      }),
-    );
+    if (!safeMessageHashIndexExists) {
+      await queryRunner.createIndex(
+        'multisig_session',
+        new TableIndex({
+          name: 'IDX_MULTISIG_SAFE_MESSAGE_HASH',
+          columnNames: ['safeMessageHash'],
+        }),
+      );
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    const table = await queryRunner.getTable('multisig_session');
+    if (!table) return;
+
     // Dropping indices for messageHash and safeMessageHash
-    await queryRunner.dropIndex(
-      'multisig_session',
-      'IDX_MULTISIG_MESSAGE_HASH',
+    const safeMessageHashIndexExists = table.indices.some(
+      idx => idx.columnNames.indexOf('safeMessageHash') !== -1,
     );
-    await queryRunner.dropIndex(
-      'multisig_session',
-      'IDX_MULTISIG_SAFE_MESSAGE_HASH',
-    );
+    if (safeMessageHashIndexExists) {
+      await queryRunner.dropIndex(
+        'multisig_session',
+        'IDX_MULTISIG_SAFE_MESSAGE_HASH',
+      );
+    }
 
     // Renaming column back to safeTransactionMessage
-    await queryRunner.renameColumn(
-      'multisig_session',
-      'safeMessageHash',
-      'safeTransactionMessage',
+    const safeMessageHashColumnExists = table.columns.some(
+      c => c.name === 'safeMessageHash',
     );
+    if (safeMessageHashColumnExists) {
+      await queryRunner.renameColumn(
+        'multisig_session',
+        'safeMessageHash',
+        'safeTransactionMessage',
+      );
+    }
 
     // Dropping the added columns
-    await queryRunner.dropColumn('multisig_session', 'isSuccessful');
-    await queryRunner.dropColumn('multisig_session', 'messageHash');
+    const statusColumnExists = table.columns.some(c => c.name === 'status');
+    if (statusColumnExists) {
+      await queryRunner.dropColumn('multisig_session', 'status');
+    }
   }
 }

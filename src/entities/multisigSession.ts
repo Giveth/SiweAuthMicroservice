@@ -31,10 +31,6 @@ export class MultisigSession extends BaseEntity {
 
   @Index()
   @Column({ nullable: false })
-  messageHash: string;
-
-  @Index()
-  @Column({ nullable: false })
   safeTransactionHash: string;
 
   @Index()
