@@ -7,14 +7,8 @@ export type AuthenticationRequest = {
 };
 
 export type MultisigAuthenticationRequest = {
-  transactionHash: string;
-  message: string;
-  network: number;
-  jwt: string;
-};
-
-export type MultisigAuthorizationRequest = {
-  multisigAddress: string;
+  safeMessageTimestamp?: number;
+  safeAddress: string;
   network: number;
   jwt: string;
 };

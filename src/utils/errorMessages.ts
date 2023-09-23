@@ -121,4 +121,14 @@ export const errorMessagesEnum = {
     httpStatusCode: 404,
     code: 2008,
   },
+  MULTISIG_MESSAGE_NOT_FOUND: {
+    message: 'Multisig message not found',
+    httpStatusCode: 404,
+    code: 2008,
+  },
+  MULTISIG_INVALID_REQUEST: {
+    message: 'Multisig invalid request, params not found',
+    httpStatusCode: 404,
+    code: 2008,
+  },
 };

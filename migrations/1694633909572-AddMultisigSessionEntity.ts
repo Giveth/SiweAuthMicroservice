@@ -57,14 +57,7 @@ export class AddMultisigSessionEntity1694633909572
         ],
         indices: [
           {
-            columnNames: ['safeTransactionHash', 'network'],
-            isUnique: true,
-          },
-          {
             columnNames: ['multisigAddress'],
-          },
-          {
-            columnNames: ['safeTransactionHash'],
           },
           {
             columnNames: ['network'],

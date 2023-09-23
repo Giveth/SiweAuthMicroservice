@@ -16,7 +16,6 @@ export enum MultisigStatuses {
 }
 
 @Entity()
-@Index(['safeTransactionHash', 'network'], { unique: true })
 export class MultisigSession extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
@@ -25,12 +24,9 @@ export class MultisigSession extends BaseEntity {
   @Column({ nullable: true })
   multisigAddress: string;
 
-  @Column({ nullable: false })
-  safeTransactionMessage: string;
-
   @Index()
   @Column({ nullable: false })
-  safeTransactionHash: string;
+  safeMessageHash: string;
 
   @Index()
   @Column({ nullable: false })
@@ -38,6 +34,13 @@ export class MultisigSession extends BaseEntity {
 
   @Column({ nullable: false, default: true })
   active: boolean;
+
+  // https://docs.safe.global/safe-smart-account/signatures/eip-1271#fetching-the-signature-asynchronously
+  // A fully signed message will have the status CONFIRMED,
+  // confirmationsSubmitted >= confirmationsRequired
+  // and a preparedSignature !== null.
+  @Column({ nullable: true, default: MultisigStatuses.Pending })
+  status: string;
 
   @Column({ nullable: false })
   expirationDate: Date;
@@ -56,9 +59,21 @@ export class MultisigSession extends BaseEntity {
     return this.expirationDate.valueOf() < moment().valueOf();
   }
 
-  multisigStatus(isSuccessful?: boolean): string {
-    if (isSuccessful) return MultisigStatuses.Successful;
+  async multisigStatus(safeMessageData: any): Promise<string> {
+    if (!this.isExpired() && safeMessageData.status !== 'CONFIRMED')
+      this.status = MultisigStatuses.Pending;
 
-    return MultisigStatuses.Pending;
+    if (this.isExpired()) this.status = MultisigStatuses.Failed;
+
+    if (
+      safeMessageData.status === 'CONFIRMED' &&
+      safeMessageData.confirmationsSubmitted >=
+        safeMessageData.confirmationsRequired
+    )
+      this.status = MultisigStatuses.Successful;
+
+    await this.save();
+
+    return this.status;
   }
 }
