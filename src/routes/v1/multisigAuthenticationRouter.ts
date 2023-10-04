@@ -11,12 +11,14 @@ multisigAuthenticationRouter.post(
     try {
       const { safeAddress, network, jwt } = req.body;
       const safeMessageTimestamp = req.body?.safeMessageTimestamp;
+      const approvalExpirationDays = req.body?.approvalExpirationDays;
       if (!safeAddress || !jwt || !network) {
         res.status(422).json({ message: errorMessagesEnum.MISSING_LOGIN_DATA });
         return;
       }
 
       const result = await multisigAuthenticationController.authenticate({
+        approvalExpirationDays,
         safeMessageTimestamp,
         safeAddress,
         network,
