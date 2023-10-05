@@ -5,6 +5,7 @@ import { generateJwt, JwtPayload } from './jwtService';
 
 interface AccessTokenFields {
   address: string;
+  expirationDate?: Date;
 }
 
 export const generateAccessToken = async (
@@ -12,12 +13,17 @@ export const generateAccessToken = async (
   isPassport = false,
 ): Promise<AccessToken> => {
   const jti = `${new Date().getTime()}-${generateRandomString(5)}`;
+  let expirationDate: Date;
 
-  const expirationDate = moment().add(30, 'days');
+  if (fields.expirationDate) {
+    expirationDate = fields.expirationDate;
+  } else {
+    expirationDate = moment().add(30, 'days').toDate();
+  }
 
   const jwtPayload: JwtPayload = {
     publicAddress: fields.address,
-    expirationDate: expirationDate.toDate(),
+    expirationDate: expirationDate,
     jti: jti,
   };
   if (isPassport) {

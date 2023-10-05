@@ -42,6 +42,10 @@ export class MultisigAuthenticationController {
         body.network,
       );
 
+      if (!multisigSession && !body.approvalExpirationDays) {
+        throw new StandardError(errorMessagesEnum.MULTISIG_INVALID_REQUEST);
+      }
+
       if (!multisigSession && body.safeMessageTimestamp) {
         safeMessage = await fetchSafeMessageByTimestamp(
           body.safeAddress,
@@ -73,6 +77,9 @@ export class MultisigAuthenticationController {
 
       if (!multisigSession) {
         multisigSession = MultisigSession.create({
+          approvalExpirationDate: moment()
+            .add(body.approvalExpirationDays, 'days')
+            .toDate(),
           expirationDate: moment().add(1, 'week').toDate(),
           safeMessageHash: safeMessage.messageHash,
           multisigAddress: body.safeAddress,
@@ -85,7 +92,19 @@ export class MultisigAuthenticationController {
         (await multisigSession.multisigStatus(safeMessage)) ===
         MultisigStatuses.Successful
       ) {
-        token = await generateAccessToken({ address: body.safeAddress });
+        if (
+          multisigSession.expirationDate !==
+          multisigSession.approvalExpirationDAte
+        ) {
+          multisigSession.expirationDate =
+            multisigSession.approvalExpirationDate;
+          await multisigSession.save();
+        }
+
+        token = await generateAccessToken({
+          address: body.safeAddress,
+          expirationDate: multisigSession.expirationDate,
+        });
         logger.info(`Multisig with address ${body.safeAddress} logged in`);
       }
 

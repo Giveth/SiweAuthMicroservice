@@ -45,6 +45,9 @@ export class MultisigSession extends BaseEntity {
   @Column({ nullable: false })
   expirationDate: Date;
 
+  @Column({ nullable: true })
+  approvalExpirationDate: Date;
+
   didExpire(): boolean {
     return this.expirationDate.valueOf() < moment().valueOf();
   }
