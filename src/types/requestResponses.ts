@@ -35,6 +35,7 @@ export type MultisigAuthenticationResponse = {
   jwt?: string;
   expiration?: number;
   publicAddress?: string;
+  safeMessageHash?: string;
   status: string;
 };
 

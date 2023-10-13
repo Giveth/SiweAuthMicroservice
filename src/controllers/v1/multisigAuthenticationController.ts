@@ -112,6 +112,7 @@ export class MultisigAuthenticationController {
         jwt: token?.jwt,
         expiration: multisigSession.expirationDate.valueOf(),
         publicAddress: multisigSession.multisigAddress,
+        safeMessageHash: multisigSession.safeMessageHash,
         status: multisigSession.status,
       };
     } catch (e) {
