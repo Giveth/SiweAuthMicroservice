@@ -30,8 +30,8 @@ export const findNonExpiredMultisigSessions = async (
 ) => {
   const session = await MultisigSession.createQueryBuilder()
     .where('network = :network', { network })
-    .andWhere('"multisigAddress" = :multisigAddress', {
-      multisigAddress,
+    .andWhere('lower("multisigAddress") = :multisigAddress', {
+      multisigAddress: multisigAddress.toLowerCase(),
     })
     .getOne();
 
