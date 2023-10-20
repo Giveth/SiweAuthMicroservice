@@ -37,15 +37,15 @@ multisigAuthenticationRouter.get(
   '/multisigAuthentication',
   async (req: Request, res: Response, next) => {
     try {
-      const { safeAddress, network } = req.body;
+      const { safeAddress, network } = req.query;
       if (!safeAddress || !network) {
         res.status(422).json({ message: errorMessagesEnum.MISSING_LOGIN_DATA });
         return;
       }
 
       const multisigSession = await findNonExpiredMultisigSessions(
-        safeAddress,
-        network,
+        String(safeAddress),
+        Number(network),
       );
 
       res.send({ active: multisigSession ? true : false });
