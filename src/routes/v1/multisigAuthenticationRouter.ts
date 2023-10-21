@@ -8,6 +8,7 @@ import {
   MultisigStatuses,
 } from '@/src/entities/multisigSession';
 import moment from 'moment';
+import { fetchSafeMessage } from '@/src/services/safeServices';
 
 export const multisigAuthenticationRouter = express.Router();
 const multisigAuthenticationController = new MultisigAuthenticationController();
@@ -52,6 +53,16 @@ multisigAuthenticationRouter.get(
         String(safeAddress),
         Number(network),
       );
+
+      if (multisigSession) {
+        const safeMessage = await fetchSafeMessage(
+          multisigSession.safeMessageHash,
+          multisigSession.network,
+        );
+
+        await multisigSession.multisigStatus(safeMessage);
+        await multisigSession.reload();
+      }
 
       res.send({
         status: multisigSession
