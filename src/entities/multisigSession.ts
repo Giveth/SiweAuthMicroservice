@@ -13,6 +13,7 @@ export enum MultisigStatuses {
   Pending = 'pending',
   Failed = 'failed',
   Successful = 'successful',
+  NotFound = 'not found',
 }
 
 @Entity()

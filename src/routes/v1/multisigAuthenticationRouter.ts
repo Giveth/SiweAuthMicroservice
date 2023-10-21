@@ -3,7 +3,10 @@ import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
 import { MultisigAuthenticationController } from '@/src/controllers/v1/multisigAuthenticationController';
 import { findNonExpiredMultisigSessions } from '@/src/repositories/multisigSessionRepository';
-import { MultisigSession } from '@/src/entities/multisigSession';
+import {
+  MultisigSession,
+  MultisigStatuses,
+} from '@/src/entities/multisigSession';
 import moment from 'moment';
 
 export const multisigAuthenticationRouter = express.Router();
@@ -50,7 +53,11 @@ multisigAuthenticationRouter.get(
         Number(network),
       );
 
-      res.send({ active: multisigSession ? true : false });
+      res.send({
+        status: multisigSession
+          ? multisigSession.status
+          : MultisigStatuses.NotFound,
+      });
     } catch (e) {
       logger.error('multisigAuthenticationController() error', e);
       next(e);
