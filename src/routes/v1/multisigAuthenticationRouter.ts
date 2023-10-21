@@ -57,6 +57,7 @@ multisigAuthenticationRouter.get(
         status: multisigSession
           ? multisigSession.status
           : MultisigStatuses.NotFound,
+        active: multisigSession?.active || false,
       });
     } catch (e) {
       logger.error('multisigAuthenticationController() error', e);
