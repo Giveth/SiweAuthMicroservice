@@ -33,6 +33,7 @@ export const findNonExpiredMultisigSessions = async (
     .andWhere('lower("multisigAddress") = :multisigAddress', {
       multisigAddress: multisigAddress.toLowerCase(),
     })
+    .andWhere('active = true')
     .orderBy('"createdAt"', 'DESC')
     .getOne();
 
