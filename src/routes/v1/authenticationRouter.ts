@@ -15,10 +15,33 @@ authenticationRouter.post(
       }
 
       const { message, signature, nonce } = req.body;
-      const result = await authController.authenticate({
+      const result = await authController.ethereumAuthenticate({
         message,
         signature,
         nonce,
+      });
+      res.send(result);
+    } catch (e) {
+      logger.error('authenticationController() error', e);
+      next(e);
+    }
+  },
+);
+
+authenticationRouter.post(
+  '/solanaAuthentication',
+  async (req: Request, res: Response, next) => {
+    try {
+      if (!req.body.payload || !req.body.signature || !req.body.message) {
+        res.status(422).json({ message: errorMessagesEnum.MISSING_LOGIN_DATA });
+        return;
+      }
+
+      const { message, signature, payload } = req.body;
+      const result = await authController.solanaAuthenticate({
+        message,
+        signature,
+        payload,
       });
       res.send(result);
     } catch (e) {

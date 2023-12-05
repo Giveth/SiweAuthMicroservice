@@ -34,6 +34,12 @@ export const errorMessagesEnum = {
     code: 1000,
   },
 
+  INVALID_SOLANA_SIGNATURE_OR_LOGIN_DATA: {
+    message: 'Invalid solana signature or login data',
+    httpStatusCode: 401,
+    code: 1000,
+  },
+
   JWT_EXPIRED: {
     message: 'Access Token is expired',
     httpStatusCode: 401,
