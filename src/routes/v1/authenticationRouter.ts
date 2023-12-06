@@ -32,16 +32,22 @@ authenticationRouter.post(
   '/solanaAuthentication',
   async (req: Request, res: Response, next) => {
     try {
-      if (!req.body.payload || !req.body.signature || !req.body.message) {
+      if (
+        !req.body.message ||
+        !req.body.nonce ||
+        !req.body.signature ||
+        !req.body.address
+      ) {
         res.status(422).json({ message: errorMessagesEnum.MISSING_LOGIN_DATA });
         return;
       }
 
-      const { message, signature, payload } = req.body;
+      const { nonce, message, signature, address } = req.body;
       const result = await authController.solanaAuthenticate({
         message,
         signature,
-        payload,
+        address,
+        nonce,
       });
       res.send(result);
     } catch (e) {

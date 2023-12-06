@@ -101,7 +101,6 @@ function authenticationTestCases() {
     payload.uri = origin;
     payload.statement = 'This is a test statement';
     payload.version = '1';
-    payload.chainId = 0;
     payload.nonce = nonce;
 
     const message = new SIWS({
@@ -117,7 +116,8 @@ function authenticationTestCases() {
     const data = {
       message,
       signature: base58.encode(signature),
-      payload: payload,
+      address: solanaPublicKey,
+      nonce,
     };
     const result = await axios.post(
       `${serverUrl}/v1/solanaAuthentication`,

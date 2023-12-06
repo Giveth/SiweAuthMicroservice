@@ -1,4 +1,3 @@
-import { Payload } from '@web3auth/sign-in-with-solana';
 import { JwtPayload } from '../services/jwtService';
 
 export type AuthenticationRequest = {
@@ -7,8 +6,8 @@ export type AuthenticationRequest = {
   nonce: string;
 };
 
-export type solanaAuthenticateRequest = Omit<AuthenticationRequest, 'nonce'> & {
-  payload: Payload;
+export type solanaAuthenticateRequest = AuthenticationRequest & {
+  address: string;
 };
 
 export type MultisigAuthenticationRequest = {

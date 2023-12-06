@@ -40,12 +40,15 @@ export class AuthenticationController {
     @Body() body: solanaAuthenticateRequest,
   ): Promise<AuthenticationResponse> {
     try {
-      const { signature, message, payload } = body;
+      const { signature, message, nonce, address } = body;
 
       const header = new Header();
       header.t = 'sip99';
 
       const msg = new SIWS(message);
+      const payload = new Payload();
+      payload.address = address;
+      payload.nonce = nonce;
 
       const result = await msg.verify({
         payload,
@@ -62,7 +65,7 @@ export class AuthenticationController {
         );
       }
 
-      return await this.issueToken(payload, payload.nonce);
+      return await this.issueToken(result.data.payload, nonce);
     } catch (e) {
       logger.error('authenticationController error', e);
       throw e;
