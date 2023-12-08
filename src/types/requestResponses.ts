@@ -6,6 +6,10 @@ export type AuthenticationRequest = {
   nonce: string;
 };
 
+export type solanaAuthenticateRequest = AuthenticationRequest & {
+  address: string;
+};
+
 export type MultisigAuthenticationRequest = {
   safeMessageTimestamp?: number;
   approvalExpirationDays?: number;

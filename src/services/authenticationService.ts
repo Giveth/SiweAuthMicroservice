@@ -3,7 +3,7 @@ import { AccessToken } from '../entities/accessToken';
 import { generateRandomString } from '../utils/utils';
 import { generateJwt, JwtPayload } from './jwtService';
 
-interface AccessTokenFields {
+export interface AccessTokenFields {
   address: string;
   expirationDate?: Date;
 }

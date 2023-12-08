@@ -12,6 +12,9 @@ import {
 /**
  * Sign-In-With-Ethereum Nonce
  * Check the nonce during verification of Messages
+ *
+ * TODO: After integration with Solana, we don't only use SIWE.
+ * We need to rename this entity to Nonce.
  */
 
 @Entity()
