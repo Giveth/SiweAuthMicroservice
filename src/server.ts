@@ -7,8 +7,6 @@ import bodyParser from 'body-parser';
 import { errorHandler } from './middlewares/errorHandler';
 import { adminJsRootPath, getAdminBroRouter } from './routes/v1/adminbroRouter';
 import { logger } from './utils/logger';
-
-// tslint:disable:no-var-requires
 const cors = require('cors');
 const whitelistHostnames: string[] = (
   process.env.HOSTNAME_WHITELIST as string

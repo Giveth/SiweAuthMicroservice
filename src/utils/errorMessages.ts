@@ -34,6 +34,12 @@ export const errorMessagesEnum = {
     code: 1000,
   },
 
+  INVALID_SOLANA_SIGNATURE_OR_LOGIN_DATA: {
+    message: 'Invalid solana signature or login data',
+    httpStatusCode: 401,
+    code: 1000,
+  },
+
   JWT_EXPIRED: {
     message: 'Access Token is expired',
     httpStatusCode: 401,
@@ -41,6 +47,12 @@ export const errorMessagesEnum = {
   },
 
   JWT_NOT_FOUND: {
+    message: 'Access token not found',
+    httpStatusCode: 401,
+    code: 1000,
+  },
+
+  MULTISIG_SESSION_NOT_FOUND: {
     message: 'Access token not found',
     httpStatusCode: 401,
     code: 1000,
@@ -89,6 +101,12 @@ export const errorMessagesEnum = {
     code: 2004,
   },
 
+  NOT_SAFE_OWNER: {
+    message: 'User requesting access, is not part of the multisig safe',
+    httpStatusCode: 403,
+    code: 1004,
+  },
+
   PASSPORT_ERROR: {
     message: 'Error authenticating passport',
     httpStatusCode: 400,
@@ -106,6 +124,16 @@ export const errorMessagesEnum = {
   },
   PASSPORT_NOT_FOUND: {
     message: 'Passport not found',
+    httpStatusCode: 404,
+    code: 2008,
+  },
+  MULTISIG_MESSAGE_NOT_FOUND: {
+    message: 'Multisig message not found',
+    httpStatusCode: 404,
+    code: 2008,
+  },
+  MULTISIG_INVALID_REQUEST: {
+    message: 'Multisig invalid request, params not found',
     httpStatusCode: 404,
     code: 2008,
   },

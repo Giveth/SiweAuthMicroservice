@@ -13,6 +13,7 @@ import { Database, Resource } from '@adminjs/typeorm';
 import { logger } from '../../utils/logger';
 import { AccessToken } from '../../entities/accessToken';
 import { findAdminByEmail } from '../../repositories/adminRepository';
+import { MultisigSession } from '@/src/entities/multisigSession';
 
 // eslint:disable-next-line:no-var-requires
 const RedisStore = require('connect-redis')(session);
@@ -74,6 +75,108 @@ const getAdminBroInstance = async () => {
       softwareBrothers: false,
     },
     resources: [
+      {
+        resource: MultisigSession,
+        options: {
+          properties: {
+            multisigAddress: {
+              isVisible: {
+                list: true,
+                filter: true,
+                show: true,
+                edit: false,
+                new: false,
+              },
+            },
+            safeMessageHash: {
+              isVisible: {
+                list: false,
+                filter: false,
+                show: false,
+                edit: false,
+                new: false,
+              },
+            },
+            network: {
+              isVisible: {
+                list: true,
+                filter: true,
+                show: true,
+                edit: false,
+                new: false,
+              },
+            },
+            active: {
+              isVisible: {
+                list: true,
+                filter: true,
+                show: true,
+                edit: true,
+                new: false,
+              },
+            },
+            status: {
+              isVisible: {
+                list: true,
+                filter: true,
+                show: true,
+                edit: false,
+                new: false,
+              },
+            },
+            expirationDate: {
+              isVisible: {
+                list: false,
+                filter: false,
+                show: true,
+                edit: false,
+                new: false,
+              },
+            },
+            approvalExpirationDate: {
+              isVisible: {
+                list: false,
+                filter: false,
+                show: true,
+                edit: false,
+                new: false,
+              },
+            },
+            createdAt: {
+              isVisible: {
+                list: false,
+                filter: false,
+                show: true,
+                edit: false,
+                new: false,
+              },
+            },
+            updatedAt: {
+              isVisible: {
+                list: false,
+                filter: false,
+                show: true,
+                edit: false,
+                new: false,
+              },
+            },
+          },
+          actions: {
+            delete: {
+              isVisible: false,
+            },
+            bulkDelete: {
+              isVisible: false,
+            },
+            new: {
+              isVisible: false,
+            },
+            edit: {
+              isVisible: true,
+            },
+          },
+        },
+      },
       {
         resource: Admin,
         options: {
