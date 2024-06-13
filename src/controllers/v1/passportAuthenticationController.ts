@@ -27,6 +27,7 @@ export class PassportAuthenticationController {
     try {
       address = ethers.utils.verifyMessage(message, signature);
     } catch (e) {
+      logger.error('authenticate, passport invalid signature error', e);
       throw new StandardError(errorMessagesEnum.PASSPORT_INVALID_SIGNATURE);
     }
     logger.info('Logging address: ', address);
