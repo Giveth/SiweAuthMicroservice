@@ -49,7 +49,10 @@ export const findNonExpiredMultisigSessions = async (
   return session;
 };
 
-export async function getMultisigSessionsCount(fromDate: Date, toDate: Date): Promise<number> {
+export async function getMultisigSessionsCount(
+  fromDate: Date,
+  toDate: Date,
+): Promise<number> {
   return await MultisigSession.count({
     where: {
       createdAt: Between(fromDate, toDate),

@@ -10,11 +10,16 @@ multisigSessionCountRouter.get(
     try {
       const { from, to } = req.query;
       if (!from || !to) {
-        res.status(422).json({ message: errorMessagesEnum.MULTISIG_SESSION_COUNTS_INVALID_REQUEST });
+        res.status(422).json({
+          message: errorMessagesEnum.MULTISIG_SESSION_COUNTS_INVALID_REQUEST,
+        });
         return;
       }
 
-      const count = await getMultisigSessionsCount(new Date(String(from)), new Date(String(to)));
+      const count = await getMultisigSessionsCount(
+        new Date(String(from)),
+        new Date(String(to)),
+      );
 
       res.send({
         count,
