@@ -137,4 +137,9 @@ export const errorMessagesEnum = {
     httpStatusCode: 404,
     code: 2008,
   },
+  MULTISIG_SESSION_COUNTS_INVALID_REQUEST: {
+    message: 'Multisig session counts invalid request, params not found',
+    httpStatusCode: 404,
+    code: 2009,
+  },
 };
