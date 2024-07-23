@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { Between } from 'typeorm';
 import { MultisigSession } from '../entities/multisigSession';
 
 export const firstOrCreateMultisigSession = async (
@@ -47,3 +48,14 @@ export const findNonExpiredMultisigSessions = async (
 
   return session;
 };
+
+export async function getMultisigSessionsCount(
+  fromDate: Date,
+  toDate: Date,
+): Promise<number> {
+  return await MultisigSession.count({
+    where: {
+      createdAt: Between(fromDate, toDate),
+    },
+  });
+}
