@@ -17,6 +17,7 @@ import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
 import { getProvider, NETWORK_IDS } from '@/src/utils/provider';
+import { isBlacklisted } from '@/src/repositories/blacklistRepository';
 
 @Tags('Authentication')
 export class AuthenticationController {
@@ -97,6 +98,10 @@ export class AuthenticationController {
     try {
       const { signature, message, nonce, address } = body;
 
+      if (await isBlacklisted(address)) {
+        throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
+      };
+
       const header = new Header();
       header.t = 'sip99';
 
@@ -131,6 +136,10 @@ export class AuthenticationController {
     fields: { nonce: string } & AccessTokenFields,
     requestNonce: string,
   ): Promise<AuthenticationResponse> {
+    if (await isBlacklisted(fields.address)) {
+      throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
+    };
+
     const whitelistedNonce = await findNonce(fields.nonce);
     if (!whitelistedNonce || fields.nonce !== requestNonce)
       throw new StandardError(errorMessagesEnum.NONCE_INVALID);

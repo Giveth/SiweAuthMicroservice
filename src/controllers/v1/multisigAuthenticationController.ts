@@ -22,6 +22,7 @@ import {
   MultisigStatuses,
 } from '@/src/entities/multisigSession';
 import moment from 'moment';
+import { isBlacklisted } from '@/src/repositories/blacklistRepository';
 
 @Route('/v1/multisigAuthentication')
 @Tags('Authentication')
@@ -36,6 +37,10 @@ export class MultisigAuthenticationController {
       let safeMessage: any;
       const safeService = await getSafeApiKit(body.network);
       const verifiedJwt = await validateJwt(body.jwt);
+
+      if (await isBlacklisted(body.safeAddress)) {
+        throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
+      };
 
       multisigSession = await findNonExpiredMultisigSessions(
         body.safeAddress,
