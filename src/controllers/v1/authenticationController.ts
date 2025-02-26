@@ -18,7 +18,6 @@ import { logger } from '../../utils/logger';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
 import { getProvider, NETWORK_IDS } from '@/src/utils/provider';
 
-
 @Tags('Authentication')
 export class AuthenticationController {
   @Route('/v1/authentication')
@@ -33,20 +32,28 @@ export class AuthenticationController {
       return code !== '0x';
     };
 
-    const erc1271Verify = async (address: string, message: string, signature: string) => {
+    const erc1271Verify = async (
+      address: string,
+      message: string,
+      signature: string,
+    ) => {
       const messageHash = ethers.utils.hashMessage(message);
-      const contract = new ethers.Contract(address, [
-        {
-          name: 'isValidSignature',
-          type: 'function',
-          stateMutability: 'view',
-          inputs: [
-            { name: 'data', type: 'bytes32' },
-            { name: 'signature', type: 'bytes' },
-          ],
-          outputs: [{ name: '', type: 'bytes4' }],
-        },
-      ], provider);
+      const contract = new ethers.Contract(
+        address,
+        [
+          {
+            name: 'isValidSignature',
+            type: 'function',
+            stateMutability: 'view',
+            inputs: [
+              { name: 'data', type: 'bytes32' },
+              { name: 'signature', type: 'bytes' },
+            ],
+            outputs: [{ name: '', type: 'bytes4' }],
+          },
+        ],
+        provider,
+      );
       const result = await contract.isValidSignature(messageHash, signature);
       return result === '0x1626ba7e';
     };
@@ -59,11 +66,15 @@ export class AuthenticationController {
         nonce: body.nonce,
       };
       return await this.issueToken(tokenFields, body.nonce);
-    } catch (e:any) {
+    } catch (e: any) {
       if (e.name === 'SiweMessageError' && e.message === 'Invalid signature') {
         const address = message.address;
         if (await isContract(address)) {
-          const isValid = await erc1271Verify(address, body.message, body.signature);
+          const isValid = await erc1271Verify(
+            address,
+            body.message,
+            body.signature,
+          );
           if (isValid) {
             const fields = {
               address: message.address,
