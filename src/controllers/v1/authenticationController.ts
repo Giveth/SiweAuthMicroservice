@@ -2,6 +2,7 @@ import { SiweMessage } from 'siwe';
 import { Route, Tags, Post, Body } from 'tsoa';
 import { SiweNonce } from '../../entities/siweNonce';
 import { findNonce } from '../../repositories/siweNonceRepository';
+import { ethers } from 'ethers';
 import {
   AccessTokenFields,
   generateAccessToken,
@@ -15,6 +16,8 @@ import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
+import { getProvider, NETWORK_IDS } from '@/src/utils/provider';
+
 
 @Tags('Authentication')
 export class AuthenticationController {
@@ -23,13 +26,54 @@ export class AuthenticationController {
   public async ethereumAuthenticate(
     @Body() body: AuthenticationRequest,
   ): Promise<AuthenticationResponse> {
-    try {
-      const message = new SiweMessage(body.message);
-      const fields = await message.validate(body.signature);
+    const provider = getProvider(NETWORK_IDS.XDAI);
 
-      return await this.issueToken(fields, body.nonce);
-    } catch (e) {
-      logger.error('authenticationController error', e);
+    const isContract = async (address: string) => {
+      const code: string = await provider.send('eth_getCode', [address]);
+      return code !== '0x';
+    };
+
+    const erc1271Verify = async (address: string, message: string, signature: string) => {
+      const messageHash = ethers.utils.hashMessage(message);
+      const contract = new ethers.Contract(address, [
+        {
+          name: 'isValidSignature',
+          type: 'function',
+          stateMutability: 'view',
+          inputs: [
+            { name: 'data', type: 'bytes32' },
+            { name: 'signature', type: 'bytes' },
+          ],
+          outputs: [{ name: '', type: 'bytes4' }],
+        },
+      ], provider);
+      const result = await contract.isValidSignature(messageHash, signature);
+      return result === '0x1626ba7e';
+    };
+
+    const message = new SiweMessage(body.message);
+    try {
+      const fields = await message.validate(body.signature);
+      const tokenFields = {
+        ...fields,
+        nonce: body.nonce,
+      };
+      return await this.issueToken(tokenFields, body.nonce);
+    } catch (e:any) {
+      if (e.name === 'SiweMessageError' && e.message === 'Invalid signature') {
+        const address = message.address;
+        if (await isContract(address)) {
+          const isValid = await erc1271Verify(address, body.message, body.signature);
+          if (isValid) {
+            const fields = {
+              address: message.address,
+              chainId: message.chainId,
+              nonce: body.nonce,
+            };
+            return await this.issueToken(fields, body.nonce);
+          }
+        }
+      }
       throw e;
     }
   }
