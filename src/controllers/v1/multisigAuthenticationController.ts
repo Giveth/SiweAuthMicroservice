@@ -40,7 +40,7 @@ export class MultisigAuthenticationController {
 
       if (await isBlacklisted(body.safeAddress)) {
         throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
-      };
+      }
 
       multisigSession = await findNonExpiredMultisigSessions(
         body.safeAddress,

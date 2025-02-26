@@ -100,7 +100,7 @@ export class AuthenticationController {
 
       if (await isBlacklisted(address)) {
         throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
-      };
+      }
 
       const header = new Header();
       header.t = 'sip99';
@@ -138,7 +138,7 @@ export class AuthenticationController {
   ): Promise<AuthenticationResponse> {
     if (await isBlacklisted(fields.address)) {
       throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
-    };
+    }
 
     const whitelistedNonce = await findNonce(fields.nonce);
     if (!whitelistedNonce || fields.nonce !== requestNonce)

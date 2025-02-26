@@ -22,7 +22,7 @@ export class AuthorizationController {
 
       if (await isBlacklisted(verifiedJwt.publicAddress)) {
         throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
-      };
+      }
 
       const dbAccessToken = await findAccessTokenByUniqueIdentifiers(
         body.jwt,
