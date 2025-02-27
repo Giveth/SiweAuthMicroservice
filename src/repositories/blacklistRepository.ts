@@ -9,10 +9,3 @@ export const isBlacklisted = async (
   );
   return !!result[0];
 };
-
-export const addToBlacklist = async (walletAddress: string): Promise<void> => {
-  await BlacklistedAddress.query(
-    `INSERT INTO blacklisted_address ("publicAddress") VALUES ($1)`,
-    [walletAddress.toLowerCase()],
-  );
-};

@@ -2,6 +2,9 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class BlacklistTable1740497626102 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const table = await queryRunner.getTable('blacklisted_address');
+    if (table) return;
+
     await queryRunner.createTable(
       new Table({
         name: 'blacklisted_address',
