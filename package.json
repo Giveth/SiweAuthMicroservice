@@ -24,6 +24,7 @@
     "db:migrate:revert:local": "NODE_ENV=development npx typeorm-ts-node-esm migration:revert -d ./src/dataSource.ts ",
     "db:migrate:run:test": "NODE_ENV=test npx typeorm-ts-node-esm migration:run -d ./src/dataSource.ts ",
     "db:migrate:revert:test": "NODE_ENV=test npx typeorm-ts-node-esm migration:revert -d ./src/dataSource.ts",
+    "migration:create": "typeorm migration:create",
     "start:server:staging": "npm run db:migrate:run:staging && cd dist &&  pm2-runtime src/index.js",
     "start:server:develop": "npm run db:migrate:run:develop && cd dist &&  pm2-runtime src/index.js",
     "start:server:production": "npm run db:migrate:run:production && cd dist &&  pm2-runtime src/index.js"

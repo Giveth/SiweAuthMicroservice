@@ -5,6 +5,7 @@ import { AuthorizationResponse } from '../../types/requestResponses';
 import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
+import { isBlacklisted } from '@/src/repositories/blacklistRepository';
 
 @Route('/v1/authorization')
 @Tags('Authorization')
@@ -18,6 +19,10 @@ export class AuthorizationController {
         body.jwt,
         process.env.JWT_SECRET as string,
       ) as any;
+
+      if (await isBlacklisted(verifiedJwt.publicAddress)) {
+        throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
+      }
 
       const dbAccessToken = await findAccessTokenByUniqueIdentifiers(
         body.jwt,
