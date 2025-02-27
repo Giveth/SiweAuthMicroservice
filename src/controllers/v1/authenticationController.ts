@@ -29,6 +29,7 @@ export class AuthenticationController {
 
     const isContract = async (address: string) => {
       const code = await provider.getCode(address);
+      logger.error('isContract code', code);
       return code !== '0x';
     };
 
@@ -38,6 +39,7 @@ export class AuthenticationController {
       signature: string,
     ) => {
       const messageHash = ethers.utils.hashMessage(message);
+      logger.error('erc1271Verify messageHash', messageHash);
       const contract = new ethers.Contract(
         address,
         [
@@ -55,6 +57,7 @@ export class AuthenticationController {
         provider,
       );
       const result = await contract.isValidSignature(messageHash, signature);
+      logger.error('erc1271Verify result', result);
       return result === '0x1626ba7e';
     };
 
@@ -72,13 +75,18 @@ export class AuthenticationController {
       if (e.message?.includes('Invalid signature')) {
         logger.error('Invalid signature, trying ERC1271 verification');
         const address = message.address;
-        if (await isContract(address)) {
+        const isContractAddress = await isContract(address);
+        logger.error('ethereumAuthenticate isContractAddress', {
+          isContractAddress,
+          address,
+        });
+        if (isContractAddress) {
           const isValid = await erc1271Verify(
             address,
             body.message,
             body.signature,
           );
-          logger.info('ERC1271 verification result', isValid);
+          logger.error('ERC1271 verification result', isValid);
           if (isValid) {
             const fields = {
               address: message.address,
