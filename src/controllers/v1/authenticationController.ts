@@ -67,8 +67,8 @@ export class AuthenticationController {
       };
       return await this.issueToken(tokenFields, body.nonce);
     } catch (e: any) {
-      console.log('Error from ethereumAuthenticate', e);
-      console.log('Error from ethereumAuthenticate Message', e.message);
+      logger.error('Error from ethereumAuthenticate', e);
+      logger.error('Error from ethereumAuthenticate Message', e.message);
       if (e.message === 'Invalid signature') {
         const address = message.address;
         if (await isContract(address)) {
