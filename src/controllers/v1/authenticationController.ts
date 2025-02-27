@@ -28,7 +28,7 @@ export class AuthenticationController {
     const provider = getProvider(NETWORK_IDS.XDAI);
 
     const isContract = async (address: string) => {
-      const code: string = await provider.send('eth_getCode', [address]);
+      const code = await provider.getCode(address);
       return code !== '0x';
     };
 
@@ -67,7 +67,9 @@ export class AuthenticationController {
       };
       return await this.issueToken(tokenFields, body.nonce);
     } catch (e: any) {
-      if (e.name === 'SiweMessageError' && e.message === 'Invalid signature') {
+      logger.error('Error from ethereumAuthenticate', e);
+      logger.error('Error from ethereumAuthenticate Message', e.message);
+      if (e.message === 'Invalid signature') {
         const address = message.address;
         if (await isContract(address)) {
           const isValid = await erc1271Verify(
