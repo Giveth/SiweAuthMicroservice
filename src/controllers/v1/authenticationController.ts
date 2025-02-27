@@ -25,6 +25,8 @@ export class AuthenticationController {
   public async ethereumAuthenticate(
     @Body() body: AuthenticationRequest,
   ): Promise<AuthenticationResponse> {
+    //TODO This is for validating the unicorn wallet, so we check the polygon network, to support
+    // more networks we need to add networkId to request input and use it to get the provider
     const provider = getProvider(NETWORK_IDS.POLYGON);
 
     const isContract = async (address: string) => {
