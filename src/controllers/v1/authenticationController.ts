@@ -25,7 +25,7 @@ export class AuthenticationController {
   public async ethereumAuthenticate(
     @Body() body: AuthenticationRequest,
   ): Promise<AuthenticationResponse> {
-    const provider = getProvider(NETWORK_IDS.XDAI);
+    const provider = getProvider(NETWORK_IDS.POLYGON);
 
     const isContract = async (address: string) => {
       const code = await provider.getCode(address);
