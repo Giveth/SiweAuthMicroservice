@@ -69,7 +69,8 @@ export class AuthenticationController {
     } catch (e: any) {
       logger.error('Error from ethereumAuthenticate', e);
       logger.error('Error from ethereumAuthenticate Message', e.message);
-      if (e.message === 'Invalid signature') {
+      if (e.message.contains('Invalid signature')) {
+        logger.error('Invalid signature, trying ERC1271 verification')
         const address = message.address;
         if (await isContract(address)) {
           const isValid = await erc1271Verify(
@@ -77,6 +78,7 @@ export class AuthenticationController {
             body.message,
             body.signature,
           );
+          logger.info('ERC1271 verification result', isValid);
           if (isValid) {
             const fields = {
               address: message.address,
