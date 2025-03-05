@@ -2,6 +2,7 @@ import { SiweMessage } from 'siwe';
 import { Route, Tags, Post, Body } from 'tsoa';
 import { SiweNonce } from '../../entities/siweNonce';
 import { findNonce } from '../../repositories/siweNonceRepository';
+import { ethers } from 'ethers';
 import {
   AccessTokenFields,
   generateAccessToken,
@@ -15,6 +16,8 @@ import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
+import { getProvider, NETWORK_IDS } from '@/src/utils/provider';
+import { isBlacklisted } from '@/src/repositories/blacklistRepository';
 
 @Tags('Authentication')
 export class AuthenticationController {
@@ -23,13 +26,80 @@ export class AuthenticationController {
   public async ethereumAuthenticate(
     @Body() body: AuthenticationRequest,
   ): Promise<AuthenticationResponse> {
-    try {
-      const message = new SiweMessage(body.message);
-      const fields = await message.validate(body.signature);
+    //TODO This is for validating the unicorn wallet, so we check the polygon network, to support
+    // more networks we need to add networkId to request input and use it to get the provider
+    const provider = getProvider(NETWORK_IDS.POLYGON);
 
-      return await this.issueToken(fields, body.nonce);
-    } catch (e) {
-      logger.error('authenticationController error', e);
+    const isContract = async (address: string) => {
+      const code = await provider.getCode(address);
+      logger.error('isContract code', code);
+      return code !== '0x';
+    };
+
+    const erc1271Verify = async (
+      address: string,
+      message: string,
+      signature: string,
+    ) => {
+      const messageHash = ethers.utils.hashMessage(message);
+      logger.error('erc1271Verify messageHash', messageHash);
+      const contract = new ethers.Contract(
+        address,
+        [
+          {
+            name: 'isValidSignature',
+            type: 'function',
+            stateMutability: 'view',
+            inputs: [
+              { name: 'data', type: 'bytes32' },
+              { name: 'signature', type: 'bytes' },
+            ],
+            outputs: [{ name: '', type: 'bytes4' }],
+          },
+        ],
+        provider,
+      );
+      const result = await contract.isValidSignature(messageHash, signature);
+      logger.error('erc1271Verify result', result);
+      return result === '0x1626ba7e';
+    };
+
+    const message = new SiweMessage(body.message);
+    try {
+      const fields = await message.validate(body.signature);
+      const tokenFields = {
+        ...fields,
+        nonce: body.nonce,
+      };
+      return await this.issueToken(tokenFields, body.nonce);
+    } catch (e: any) {
+      logger.error('Error from ethereumAuthenticate', e);
+      logger.error('Error from ethereumAuthenticate Message', e.message);
+      if (e.message?.includes('Invalid signature')) {
+        logger.error('Invalid signature, trying ERC1271 verification');
+        const address = message.address;
+        const isContractAddress = await isContract(address);
+        logger.error('ethereumAuthenticate isContractAddress', {
+          isContractAddress,
+          address,
+        });
+        if (isContractAddress) {
+          const isValid = await erc1271Verify(
+            address,
+            body.message,
+            body.signature,
+          );
+          logger.error('ERC1271 verification result', isValid);
+          if (isValid) {
+            const fields = {
+              address: message.address,
+              chainId: message.chainId,
+              nonce: body.nonce,
+            };
+            return await this.issueToken(fields, body.nonce);
+          }
+        }
+      }
       throw e;
     }
   }
@@ -41,6 +111,10 @@ export class AuthenticationController {
   ): Promise<AuthenticationResponse> {
     try {
       const { signature, message, nonce, address } = body;
+
+      if (await isBlacklisted(address)) {
+        throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
+      }
 
       const header = new Header();
       header.t = 'sip99';
@@ -76,6 +150,10 @@ export class AuthenticationController {
     fields: { nonce: string } & AccessTokenFields,
     requestNonce: string,
   ): Promise<AuthenticationResponse> {
+    if (await isBlacklisted(fields.address)) {
+      throw new StandardError(errorMessagesEnum.BLACKLISTED_ADDRESS);
+    }
+
     const whitelistedNonce = await findNonce(fields.nonce);
     if (!whitelistedNonce || fields.nonce !== requestNonce)
       throw new StandardError(errorMessagesEnum.NONCE_INVALID);

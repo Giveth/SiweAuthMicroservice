@@ -19,7 +19,7 @@ export const fetchSafeMessage = async (
     );
     safeMessage = response.data;
   } catch (e) {
-    console.error(e);
+    console.error('fetchSafeMessage() error', e);
   }
 
   return safeMessage;
@@ -43,7 +43,7 @@ export const fetchSafeMessageByTimestamp = async (
       response.data.results,
     );
   } catch (e) {
-    console.error(e);
+    console.error('fetchSafeMessageByTimestamp() error', e);
   }
 
   return safeMessage;

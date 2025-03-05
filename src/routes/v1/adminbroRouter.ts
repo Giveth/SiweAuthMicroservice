@@ -46,7 +46,7 @@ export const getAdminBroRouter = async () => {
           }
           return false;
         } catch (e) {
-          logger.error({ e });
+          logger.error('getAdminBroInstance() error', e);
           return false;
         }
       },

@@ -23,3 +23,6 @@ config/staging.env
 
 *.log
 *.log.*
+
+.DS_Store
+

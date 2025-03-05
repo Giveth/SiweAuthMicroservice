@@ -142,4 +142,9 @@ export const errorMessagesEnum = {
     httpStatusCode: 404,
     code: 2009,
   },
+  BLACKLISTED_ADDRESS: {
+    message: 'Address is blacklisted',
+    httpStatusCode: 403,
+    code: 2010,
+  },
 };
