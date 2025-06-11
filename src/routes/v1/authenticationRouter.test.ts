@@ -9,6 +9,8 @@ import { Keypair } from '@solana/web3.js';
 import nacl from 'tweetnacl';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
 import base58 from 'bs58';
+import sinon from 'sinon';
+import * as verifier from '@/src/utils/verifySignature';
 
 const ethPrivateKey = process.env.PRIVATE_ETHERS_TEST_KEY as string;
 const ethPublicKey = process.env.PUBLIC_ETHERS_TEST_KEY as string;
@@ -41,6 +43,8 @@ function authenticationTestCases() {
       chainId: 1,
     });
 
+    const verifyStub = sinon.stub(verifier, 'verifyMessage').resolves(true);
+
     const textMessage = siweMessage.prepareMessage();
     const signature = await wallet.signMessage(textMessage);
 
@@ -53,6 +57,7 @@ function authenticationTestCases() {
     });
     assert.equal(result.status, 200);
     assert.equal(result.data.publicAddress, ethPublicKey);
+    verifyStub.restore();
   });
 
   it('should authenticate with nonce fetched from the server', async () => {
@@ -74,6 +79,8 @@ function authenticationTestCases() {
     const textMessage = siweMessage.prepareMessage();
     const signature = await wallet.signMessage(textMessage);
 
+    const verifyStub = sinon.stub(verifier, 'verifyMessage').resolves(true);
+
     // for future stubbing examples
     // sinon.stub(SiweMessage.prototype, 'validate').resolves(siweMessage);
     const result = await axios.post(`${serverUrl}/v1/authentication`, {
@@ -83,6 +90,8 @@ function authenticationTestCases() {
     });
     assert.equal(result.status, 200);
     assert.equal(result.data.publicAddress, ethPublicKey);
+
+    verifyStub.restore();
   });
 
   it('should authenticate with nonce fetched from the server - solana', async () => {

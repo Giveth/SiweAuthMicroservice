@@ -18,6 +18,7 @@ import { logger } from '../../utils/logger';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
 import { getProvider, NETWORK_IDS } from '@/src/utils/provider';
 import { isBlacklisted } from '@/src/repositories/blacklistRepository';
+import * as verifier from '@/src/utils/verifySignature';
 
 @Tags('Authentication')
 export class AuthenticationController {
@@ -26,80 +27,37 @@ export class AuthenticationController {
   public async ethereumAuthenticate(
     @Body() body: AuthenticationRequest,
   ): Promise<AuthenticationResponse> {
-    //TODO This is for validating the unicorn wallet, so we check the polygon network, to support
-    // more networks we need to add networkId to request input and use it to get the provider
-    const provider = getProvider(NETWORK_IDS.POLYGON);
-
-    const isContract = async (address: string) => {
-      const code = await provider.getCode(address);
-      logger.error('isContract code', code);
-      return code !== '0x';
-    };
-
-    const erc1271Verify = async (
-      address: string,
-      message: string,
-      signature: string,
-    ) => {
-      const messageHash = ethers.utils.hashMessage(message);
-      logger.error('erc1271Verify messageHash', messageHash);
-      const contract = new ethers.Contract(
-        address,
-        [
-          {
-            name: 'isValidSignature',
-            type: 'function',
-            stateMutability: 'view',
-            inputs: [
-              { name: 'data', type: 'bytes32' },
-              { name: 'signature', type: 'bytes' },
-            ],
-            outputs: [{ name: '', type: 'bytes4' }],
-          },
-        ],
-        provider,
-      );
-      const result = await contract.isValidSignature(messageHash, signature);
-      logger.error('erc1271Verify result', result);
-      return result === '0x1626ba7e';
-    };
-
-    const message = new SiweMessage(body.message);
     try {
-      const fields = await message.validate(body.signature);
+      // TODO: This is for validating the unicorn wallet, so we check the polygon network, to support
+      // more networks we need to add networkId to request input and use it to get the provider
+      const provider = getProvider(NETWORK_IDS.POLYGON);
+
+      const message = new SiweMessage(body.message);
+
+      // Use the unified verifyMessage function for EOA, ERC1271, and ERC6492.
+      const isValidSignature = await verifier.verifyMessage({
+        signer: message.address,
+        message: message.toMessage(),
+        signature: body.signature,
+        provider: provider,
+      });
+
+      if (!isValidSignature) {
+        throw new StandardError(errorMessagesEnum.INVALID_EVM_SIGNATURE);
+      }
+
       const tokenFields = {
-        ...fields,
+        address: message.address,
+        chainId: message.chainId,
         nonce: body.nonce,
       };
+
       return await this.issueToken(tokenFields, body.nonce);
     } catch (e: any) {
-      logger.error('Error from ethereumAuthenticate', e);
-      logger.error('Error from ethereumAuthenticate Message', e.message);
-      if (e.message?.includes('Invalid signature')) {
-        logger.error('Invalid signature, trying ERC1271 verification');
-        const address = message.address;
-        const isContractAddress = await isContract(address);
-        logger.error('ethereumAuthenticate isContractAddress', {
-          isContractAddress,
-          address,
-        });
-        if (isContractAddress) {
-          const isValid = await erc1271Verify(
-            address,
-            body.message,
-            body.signature,
-          );
-          logger.error('ERC1271 verification result', isValid);
-          if (isValid) {
-            const fields = {
-              address: message.address,
-              chainId: message.chainId,
-              nonce: body.nonce,
-            };
-            return await this.issueToken(fields, body.nonce);
-          }
-        }
-      }
+      logger.error('Error during Ethereum authentication', {
+        error: e.message,
+        stack: e.stack,
+      });
       throw e;
     }
   }
