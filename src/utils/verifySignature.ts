@@ -71,7 +71,7 @@ export async function verifyMessage({
       typeof result !== 'string' ? result.data : result,
     );
 
-  if (!callResult) return false;
+  if (!callResult) throw new Error('Call result is undefined.');
   if (callResult === '0x01') return true;
   if (callResult === '0x00') return false;
   if (callResult.startsWith('0x08c379a0'))
