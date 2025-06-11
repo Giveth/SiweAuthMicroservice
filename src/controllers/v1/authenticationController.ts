@@ -1,6 +1,5 @@
 import { SiweMessage } from 'siwe';
 import { Route, Tags, Post, Body } from 'tsoa';
-import { verifyMessage } from '@ambire/signature-validator';
 import { SiweNonce } from '../../entities/siweNonce';
 import { findNonce } from '../../repositories/siweNonceRepository';
 import { ethers } from 'ethers';
@@ -19,6 +18,7 @@ import { logger } from '../../utils/logger';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
 import { getProvider, NETWORK_IDS } from '@/src/utils/provider';
 import { isBlacklisted } from '@/src/repositories/blacklistRepository';
+import { verifyMessage } from '@/src/utils/verifySignature';
 
 @Tags('Authentication')
 export class AuthenticationController {
