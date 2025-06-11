@@ -18,7 +18,7 @@ import { logger } from '../../utils/logger';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
 import { getProvider, NETWORK_IDS } from '@/src/utils/provider';
 import { isBlacklisted } from '@/src/repositories/blacklistRepository';
-import { verifyMessage } from '@/src/utils/verifySignature';
+import * as verifier from '@/src/utils/verifySignature';
 
 @Tags('Authentication')
 export class AuthenticationController {
@@ -35,7 +35,7 @@ export class AuthenticationController {
       const message = new SiweMessage(body.message);
 
       // Use the unified verifyMessage function for EOA, ERC1271, and ERC6492.
-      const isValidSignature = await verifyMessage({
+      const isValidSignature = await verifier.verifyMessage({
         signer: message.address,
         message: message.toMessage(),
         signature: body.signature,
