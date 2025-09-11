@@ -30,7 +30,7 @@ export class AuthenticationController {
     try {
       // TODO: This is for validating the unicorn wallet, so we check the polygon network, to support
       // more networks we need to add networkId to request input and use it to get the provider
-      const provider = getProvider(NETWORK_IDS.POLYGON);
+      const provider = getProvider(NETWORK_IDS.MAIN_NET);
 
       const message = new SiweMessage(body.message);
 
