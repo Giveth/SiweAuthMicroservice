@@ -28,11 +28,8 @@ export class AuthenticationController {
     @Body() body: AuthenticationRequest,
   ): Promise<AuthenticationResponse> {
     try {
-      // TODO: This is for validating the unicorn wallet, so we check the polygon network, to support
-      // more networks we need to add networkId to request input and use it to get the provider
-      const provider = getProvider(NETWORK_IDS.POLYGON);
-
       const message = new SiweMessage(body.message);
+      const provider = getProvider(message.chainId);
 
       // Use the unified verifyMessage function for EOA, ERC1271, and ERC6492.
       const isValidSignature = await verifier.verifyMessage({
