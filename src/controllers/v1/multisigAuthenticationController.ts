@@ -1,4 +1,18 @@
-import { Route, Tags, Post, Body } from 'tsoa';
+import {
+  MultisigSession,
+  MultisigStatuses,
+} from '@/src/entities/multisigSession';
+import { isBlacklisted } from '@/src/repositories/blacklistRepository';
+import { findNonExpiredMultisigSessions } from '@/src/repositories/multisigSessionRepository';
+import { generateAccessToken } from '@/src/services/authenticationService';
+import { validateJwt } from '@/src/services/jwtService';
+import {
+  fetchSafeMessage,
+  fetchSafeMessageByTimestamp,
+  getSafeApiKit,
+} from '@/src/services/safeServices';
+import moment from 'moment';
+import { Body, Post, Route, Tags } from 'tsoa';
 import {
   MultisigAuthenticationRequest,
   MultisigAuthenticationResponse,
@@ -6,23 +20,6 @@ import {
 import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
-import { generateAccessToken } from '@/src/services/authenticationService';
-import {
-  findNonExpiredMultisigSessions,
-  firstOrCreateMultisigSession,
-} from '@/src/repositories/multisigSessionRepository';
-import {
-  fetchSafeMessage,
-  fetchSafeMessageByTimestamp,
-  getSafeApiKit,
-} from '@/src/services/safeServices';
-import { validateJwt } from '@/src/services/jwtService';
-import {
-  MultisigSession,
-  MultisigStatuses,
-} from '@/src/entities/multisigSession';
-import moment from 'moment';
-import { isBlacklisted } from '@/src/repositories/blacklistRepository';
 
 @Route('/v1/multisigAuthentication')
 @Tags('Authentication')
@@ -46,6 +43,8 @@ export class MultisigAuthenticationController {
         body.safeAddress,
         body.network,
       );
+
+      logger.info('multisigSession', { multisigSession, body, verifiedJwt });
 
       if (!multisigSession && !body.approvalExpirationDays) {
         throw new StandardError(errorMessagesEnum.MULTISIG_INVALID_REQUEST);
