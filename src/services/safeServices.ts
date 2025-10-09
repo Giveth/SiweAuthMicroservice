@@ -42,23 +42,8 @@ export const fetchSafeMessageByTimestamp = async (
       `https://safe-client.safe.global/v1/chains/${networkId}/safes/${safeAddress}/messages`,
       {
         headers: {
-          accept: 'application/json',
-          'accept-language': 'en-US,en;q=0.9,fa;q=0.8',
-          'cache-control': 'no-cache',
-          dnt: '1',
-          pragma: 'no-cache',
-          priority: 'u=1, i',
-          referer: 'https://safe-client.safe.global/api',
-          'sec-ch-ua':
-            '"Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"',
-          'sec-ch-ua-mobile': '?0',
-          'sec-ch-ua-platform': '"macOS"',
-          'sec-fetch-dest': 'empty',
-          'sec-fetch-mode': 'cors',
-          'sec-fetch-site': 'same-origin',
-          'sec-gpc': '1',
           'user-agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0',
         },
       },
     );
