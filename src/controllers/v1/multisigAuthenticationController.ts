@@ -44,8 +44,6 @@ export class MultisigAuthenticationController {
         body.network,
       );
 
-      logger.info('multisigSession', { multisigSession, body, verifiedJwt });
-
       if (!multisigSession && !body.approvalExpirationDays) {
         throw new StandardError(errorMessagesEnum.MULTISIG_INVALID_REQUEST);
       }
