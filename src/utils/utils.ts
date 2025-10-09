@@ -24,53 +24,34 @@ export const findObjectByClosestTimestamp = (
   target: number,
   objects: any[],
 ) => {
-  if (!objects || objects.length === 0) return null;
+  if (objects.length === 0) return null;
 
-  const candidateObjects = objects
-    .map(obj => {
-      const rawTimestamp =
-        obj?.creationTimestamp ??
-        obj?.timestamp ??
-        obj?.createdAt ??
-        obj?.created ??
-        obj?.submissionDate ??
-        obj?.date;
+  const safeMessages = objects.filter(item => item.type !== 'DATE_LABEL');
+  const dateLabelObjects = safeMessages.filter(obj =>
+    isValidSafeLoginMessage(obj),
+  );
 
-      let normalizedTimestamp: number | undefined = undefined;
-      if (typeof rawTimestamp === 'string') {
-        const parsed = Number(rawTimestamp);
-        normalizedTimestamp = Number.isNaN(parsed) ? undefined : parsed;
-      } else if (typeof rawTimestamp === 'number') {
-        normalizedTimestamp = rawTimestamp;
-      }
+  let closestObj = dateLabelObjects[0];
+  let closestTimestamp = closestObj.creationTimestamp;
+  let smallestDifference = Math.abs(target - closestTimestamp);
+  const tenMinutesInMilliseconds = 10 * 60 * 1000;
+  const currentTime = new Date().getTime();
 
-      if (typeof normalizedTimestamp === 'number') {
-        if (normalizedTimestamp < 1e12) {
-          normalizedTimestamp = normalizedTimestamp * 1000;
-        }
-      }
-
-      return { obj, ts: normalizedTimestamp };
-    })
-    .filter(item => typeof item.ts === 'number' && !Number.isNaN(item.ts));
-
-  if (candidateObjects.length === 0) return null;
-
-  let closest = candidateObjects[0];
-  let smallestDifference = Math.abs(target - (closest.ts as number));
-
-  for (let i = 1; i < candidateObjects.length; i++) {
-    const diff = Math.abs(target - (candidateObjects[i].ts as number));
-    if (diff < smallestDifference) {
-      smallestDifference = diff;
-      closest = candidateObjects[i];
+  dateLabelObjects.forEach(obj => {
+    const difference = Math.abs(target - obj.creationTimestamp);
+    if (
+      difference <= tenMinutesInMilliseconds &&
+      difference < smallestDifference
+    ) {
+      smallestDifference = difference;
+      closestObj = obj;
+      closestTimestamp = obj.creationTimestamp;
     }
-  }
+  });
 
-  const acceptableWindowMs = 15 * 60 * 1000;
-  if (smallestDifference > acceptableWindowMs) {
+  if (currentTime - closestTimestamp > tenMinutesInMilliseconds) {
     return null;
   }
 
-  return closest.obj;
+  return closestObj;
 };

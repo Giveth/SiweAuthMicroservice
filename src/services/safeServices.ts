@@ -40,7 +40,10 @@ export const fetchSafeMessageByTimestamp = async (
     const response = await axios.get(
       `https://safe-client.safe.global/v1/chains/${networkId}/safes/${safeAddress}/messages`,
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+        },
       },
     );
     logger.info('fetchSafeMessageByTimestamp() response', { response });
