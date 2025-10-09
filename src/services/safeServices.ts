@@ -42,7 +42,8 @@ export const fetchSafeMessageByTimestamp = async (
       {
         headers: {
           'Content-Type': 'application/json',
-          'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+          'user-agent':
+            'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0',
         },
       },
     );
