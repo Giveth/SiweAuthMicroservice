@@ -31,7 +31,11 @@ export const fetchSafeMessageByTimestamp = async (
   networkId: number,
 ) => {
   let safeMessage;
-  logger.info('fetchSafeMessageByTimestamp()', { safeAddress, safeMessageTimestamp, networkId });
+  logger.info('fetchSafeMessageByTimestamp()', {
+    safeAddress,
+    safeMessageTimestamp,
+    networkId,
+  });
   try {
     const response = await axios.get(
       `https://safe-client.safe.global/v1/chains/${networkId}/safes/${safeAddress}/messages`,
