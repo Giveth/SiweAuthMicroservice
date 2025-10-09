@@ -1,9 +1,9 @@
-import { getProvider, getSafeTransactionNetworkUrl } from '../utils/provider';
-import { ethers } from 'ethers';
 import SafeApiKit from '@safe-global/api-kit';
 import { EthersAdapter } from '@safe-global/protocol-kit';
-import { findObjectByClosestTimestamp } from '../utils/utils';
 import axios from 'axios';
+import { ethers, logger } from 'ethers';
+import { getProvider, getSafeTransactionNetworkUrl } from '../utils/provider';
+import { findObjectByClosestTimestamp } from '../utils/utils';
 
 export const fetchSafeMessage = async (
   safeMessageHash: string,
@@ -31,6 +31,7 @@ export const fetchSafeMessageByTimestamp = async (
   networkId: number,
 ) => {
   let safeMessage;
+  logger.info('fetchSafeMessageByTimestamp()', { safeAddress, safeMessageTimestamp, networkId });
   try {
     const response = await axios.get(
       `https://safe-client.safe.global/v1/chains/${networkId}/safes/${safeAddress}/messages`,
@@ -38,6 +39,7 @@ export const fetchSafeMessageByTimestamp = async (
         headers: { 'Content-Type': 'application/json' },
       },
     );
+    logger.info('fetchSafeMessageByTimestamp() response', { response });
     safeMessage = findObjectByClosestTimestamp(
       safeMessageTimestamp,
       response.data.results,
