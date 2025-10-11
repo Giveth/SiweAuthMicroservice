@@ -48,6 +48,8 @@ export class MultisigAuthenticationController {
         throw new StandardError(errorMessagesEnum.MULTISIG_INVALID_REQUEST);
       }
 
+      logger.info('multisigSession:', { multisigSession, body });
+
       if (!multisigSession && body.safeMessageTimestamp) {
         safeMessage = await fetchSafeMessageByTimestamp(
           body.safeAddress,

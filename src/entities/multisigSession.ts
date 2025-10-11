@@ -37,7 +37,7 @@ export class MultisigSession extends BaseEntity {
   active: boolean;
 
   // https://docs.safe.global/safe-smart-account/signatures/eip-1271#fetching-the-signature-asynchronously
-  // A fully signed message will have the status CONFIRMED,
+  // A fully signed message will have
   // confirmationsSubmitted >= confirmationsRequired
   // and a preparedSignature !== null.
   @Column({ nullable: true, default: MultisigStatuses.Pending })
