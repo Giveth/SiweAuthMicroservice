@@ -68,6 +68,13 @@ export class MultisigAuthenticationController {
 
       const safeInfo = await safeService.getSafeInfo(body.safeAddress);
 
+      logger.info('safeMessage:', {
+        safeMessage,
+        proposedBy: safeMessage?.proposedBy,
+        verifiedJwt: verifiedJwt.publicAddress,
+        safeInfo,
+      });
+
       if (
         !multisigSession &&
         safeMessage?.proposedBy?.value !== verifiedJwt.publicAddress

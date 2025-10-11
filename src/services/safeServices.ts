@@ -32,7 +32,9 @@ export const fetchSafeMessageByTimestamp = async (
   try {
     const apiKit = await getSafeApiKit(networkId);
     const response = await apiKit.getMessages(safeAddress);
-    logger.info('fetchSafeMessageByTimestamp() response', { response });
+    logger.info('fetchSafeMessageByTimestamp() response', {
+      results: response.results,
+    });
     safeMessage = findObjectByClosestTimestamp(
       safeMessageTimestamp,
       response.results,
