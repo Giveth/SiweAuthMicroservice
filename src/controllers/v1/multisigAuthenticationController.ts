@@ -77,11 +77,16 @@ export class MultisigAuthenticationController {
 
       if (
         !multisigSession &&
-        safeMessage?.proposedBy?.value !== verifiedJwt.publicAddress
+        (safeMessage?.proposedBy || '').toLowerCase() !==
+          (verifiedJwt.publicAddress || '').toLowerCase()
       )
         throw new StandardError(errorMessagesEnum.NOT_SAFE_OWNER);
 
-      if (!safeInfo.owners.includes(verifiedJwt.publicAddress))
+      if (
+        !safeInfo.owners
+          .map(o => o.toLowerCase())
+          .includes((verifiedJwt.publicAddress || '').toLowerCase())
+      )
         throw new StandardError(errorMessagesEnum.NOT_SAFE_OWNER);
 
       if (!multisigSession) {
