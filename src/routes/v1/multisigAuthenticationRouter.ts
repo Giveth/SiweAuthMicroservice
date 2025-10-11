@@ -1,14 +1,10 @@
+import { MultisigAuthenticationController } from '@/src/controllers/v1/multisigAuthenticationController';
+import { MultisigStatuses } from '@/src/entities/multisigSession';
+import { findNonExpiredMultisigSessions } from '@/src/repositories/multisigSessionRepository';
+import { fetchSafeMessage, getSafeApiKit } from '@/src/services/safeServices';
 import express, { Request, Response } from 'express';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
-import { MultisigAuthenticationController } from '@/src/controllers/v1/multisigAuthenticationController';
-import { findNonExpiredMultisigSessions } from '@/src/repositories/multisigSessionRepository';
-import {
-  MultisigSession,
-  MultisigStatuses,
-} from '@/src/entities/multisigSession';
-import moment from 'moment';
-import { fetchSafeMessage } from '@/src/services/safeServices';
 
 export const multisigAuthenticationRouter = express.Router();
 const multisigAuthenticationController = new MultisigAuthenticationController();
@@ -60,7 +56,14 @@ multisigAuthenticationRouter.get(
           multisigSession.network,
         );
 
-        await multisigSession.multisigStatus(safeMessage);
+        const safeService = await getSafeApiKit(multisigSession.network);
+        const safeInfo = await safeService.getSafeInfo(
+          multisigSession.multisigAddress,
+        );
+
+        if (safeMessage) {
+          await multisigSession.multisigStatus(safeMessage, safeInfo.threshold);
+        }
         await multisigSession.reload();
       }
 

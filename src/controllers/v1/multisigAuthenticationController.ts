@@ -70,6 +70,7 @@ export class MultisigAuthenticationController {
 
       logger.info('safeMessage:', {
         safeMessage,
+        confirmations: safeMessage?.confirmations,
         proposedBy: safeMessage?.proposedBy,
         verifiedJwt: verifiedJwt.publicAddress,
         safeInfo,
@@ -103,8 +104,10 @@ export class MultisigAuthenticationController {
       }
 
       if (
-        (await multisigSession.multisigStatus(safeMessage)) ===
-        MultisigStatuses.Successful
+        (await multisigSession.multisigStatus(
+          safeMessage,
+          safeInfo.threshold,
+        )) === MultisigStatuses.Successful
       ) {
         if (
           multisigSession.expirationDate !==

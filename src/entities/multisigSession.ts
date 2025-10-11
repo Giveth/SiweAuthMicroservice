@@ -63,21 +63,34 @@ export class MultisigSession extends BaseEntity {
     return this.expirationDate.valueOf() < moment().valueOf();
   }
 
-  async multisigStatus(safeMessageData: any): Promise<string> {
-    if (!this.isExpired() && safeMessageData.status !== 'CONFIRMED')
-      this.status = MultisigStatuses.Pending;
+  async multisigStatus(
+    safeMessageData: {
+      confirmations?: Array<unknown>;
+      preparedSignature?: string | null;
+    },
+    confirmationsRequired: number,
+  ): Promise<string> {
+    if (this.isExpired()) {
+      this.status = MultisigStatuses.Failed;
+      await this.save();
+      return this.status;
+    }
 
-    if (this.isExpired()) this.status = MultisigStatuses.Failed;
+    const confirmationsSubmitted = Array.isArray(safeMessageData?.confirmations)
+      ? safeMessageData.confirmations.length
+      : 0;
+    const hasPreparedSignature = Boolean(safeMessageData?.preparedSignature);
 
     if (
-      safeMessageData.status === 'CONFIRMED' &&
-      safeMessageData.confirmationsSubmitted >=
-        safeMessageData.confirmationsRequired
-    )
+      hasPreparedSignature &&
+      confirmationsSubmitted >= confirmationsRequired
+    ) {
       this.status = MultisigStatuses.Successful;
+    } else {
+      this.status = MultisigStatuses.Pending;
+    }
 
     await this.save();
-
     return this.status;
   }
 }
