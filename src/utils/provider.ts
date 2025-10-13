@@ -69,7 +69,6 @@ export const getOriginHeader = () => {
   return 'impact-graph-' + SERVICE_NAME || 'unnamed';
 };
 
-// https://docs.safe.global/safe-core-api/available-services
 export function getSafeTransactionNetworkUrl(network: number) {
   let url;
   switch (network) {
