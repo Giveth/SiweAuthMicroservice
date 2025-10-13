@@ -1,9 +1,6 @@
-import { getProvider, getSafeTransactionNetworkUrl } from '../utils/provider';
-import { ethers } from 'ethers';
 import SafeApiKit from '@safe-global/api-kit';
-import { EthersAdapter } from '@safe-global/protocol-kit';
+import { logger } from '../utils/logger';
 import { findObjectByClosestTimestamp } from '../utils/utils';
-import axios from 'axios';
 
 export const fetchSafeMessage = async (
   safeMessageHash: string,
@@ -11,13 +8,8 @@ export const fetchSafeMessage = async (
 ) => {
   let safeMessage;
   try {
-    const response = await axios.get(
-      `https://safe-client.safe.global/v1/chains/${networkId}/messages/${safeMessageHash}`,
-      {
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
-    safeMessage = response.data;
+    const apiKit = await getSafeApiKit(networkId);
+    safeMessage = await apiKit.getMessage(safeMessageHash);
   } catch (e) {
     console.error('fetchSafeMessage() error', e);
   }
@@ -31,16 +23,21 @@ export const fetchSafeMessageByTimestamp = async (
   networkId: number,
 ) => {
   let safeMessage;
+  logger.info('fetchSafeMessageByTimestamp() info:', {
+    safeAddress,
+    safeMessageTimestamp,
+    networkId,
+    date: new Date().toISOString(),
+  });
   try {
-    const response = await axios.get(
-      `https://safe-client.safe.global/v1/chains/${networkId}/safes/${safeAddress}/messages`,
-      {
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    const apiKit = await getSafeApiKit(networkId);
+    const response = await apiKit.getMessages(safeAddress);
+    logger.info('fetchSafeMessageByTimestamp() response', {
+      results: response.results,
+    });
     safeMessage = findObjectByClosestTimestamp(
       safeMessageTimestamp,
-      response.data.results,
+      response.results,
     );
   } catch (e) {
     console.error('fetchSafeMessageByTimestamp() error', e);
@@ -50,14 +47,9 @@ export const fetchSafeMessageByTimestamp = async (
 };
 
 export const getSafeApiKit = async (network: number) => {
-  const provider = getProvider(network);
-  const ethAdapter = new EthersAdapter({
-    ethers,
-    signerOrProvider: provider,
-  });
-
   return new SafeApiKit({
-    txServiceUrl: getSafeTransactionNetworkUrl(network),
-    ethAdapter,
+    // Per Safe docs, chainId must be a bigint literal; convert network id accordingly
+    chainId: BigInt(network),
+    apiKey: process.env.SAFE_API_KEY,
   });
 };

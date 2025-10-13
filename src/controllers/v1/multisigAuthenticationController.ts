@@ -1,4 +1,18 @@
-import { Route, Tags, Post, Body } from 'tsoa';
+import {
+  MultisigSession,
+  MultisigStatuses,
+} from '@/src/entities/multisigSession';
+import { isBlacklisted } from '@/src/repositories/blacklistRepository';
+import { findNonExpiredMultisigSessions } from '@/src/repositories/multisigSessionRepository';
+import { generateAccessToken } from '@/src/services/authenticationService';
+import { validateJwt } from '@/src/services/jwtService';
+import {
+  fetchSafeMessage,
+  fetchSafeMessageByTimestamp,
+  getSafeApiKit,
+} from '@/src/services/safeServices';
+import moment from 'moment';
+import { Body, Post, Route, Tags } from 'tsoa';
 import {
   MultisigAuthenticationRequest,
   MultisigAuthenticationResponse,
@@ -6,23 +20,6 @@ import {
 import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
-import { generateAccessToken } from '@/src/services/authenticationService';
-import {
-  findNonExpiredMultisigSessions,
-  firstOrCreateMultisigSession,
-} from '@/src/repositories/multisigSessionRepository';
-import {
-  fetchSafeMessage,
-  fetchSafeMessageByTimestamp,
-  getSafeApiKit,
-} from '@/src/services/safeServices';
-import { validateJwt } from '@/src/services/jwtService';
-import {
-  MultisigSession,
-  MultisigStatuses,
-} from '@/src/entities/multisigSession';
-import moment from 'moment';
-import { isBlacklisted } from '@/src/repositories/blacklistRepository';
 
 @Route('/v1/multisigAuthentication')
 @Tags('Authentication')
@@ -51,6 +48,8 @@ export class MultisigAuthenticationController {
         throw new StandardError(errorMessagesEnum.MULTISIG_INVALID_REQUEST);
       }
 
+      logger.info('multisigSession:', { multisigSession, body });
+
       if (!multisigSession && body.safeMessageTimestamp) {
         safeMessage = await fetchSafeMessageByTimestamp(
           body.safeAddress,
@@ -71,13 +70,26 @@ export class MultisigAuthenticationController {
 
       const safeInfo = await safeService.getSafeInfo(body.safeAddress);
 
+      logger.info('safeMessage:', {
+        safeMessage,
+        confirmations: safeMessage?.confirmations,
+        proposedBy: safeMessage?.proposedBy,
+        verifiedJwt: verifiedJwt.publicAddress,
+        safeInfo,
+      });
+
       if (
         !multisigSession &&
-        safeMessage?.proposedBy?.value !== verifiedJwt.publicAddress
+        (safeMessage?.proposedBy || '').toLowerCase() !==
+          (verifiedJwt.publicAddress || '').toLowerCase()
       )
         throw new StandardError(errorMessagesEnum.NOT_SAFE_OWNER);
 
-      if (!safeInfo.owners.includes(verifiedJwt.publicAddress))
+      if (
+        !safeInfo.owners
+          .map(o => o.toLowerCase())
+          .includes((verifiedJwt.publicAddress || '').toLowerCase())
+      )
         throw new StandardError(errorMessagesEnum.NOT_SAFE_OWNER);
 
       if (!multisigSession) {
@@ -94,8 +106,10 @@ export class MultisigAuthenticationController {
       }
 
       if (
-        (await multisigSession.multisigStatus(safeMessage)) ===
-        MultisigStatuses.Successful
+        (await multisigSession.multisigStatus(
+          safeMessage,
+          safeInfo.threshold,
+        )) === MultisigStatuses.Successful
       ) {
         if (
           multisigSession.expirationDate !==
