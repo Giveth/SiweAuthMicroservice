@@ -1,10 +1,10 @@
+import bodyParser from 'body-parser';
 import express, { Application } from 'express';
 import swaggerUi from 'swagger-ui-express';
-import { v1Router } from './routes/v1';
-import { AppDataSource } from './dataSource';
 import { DataSource } from 'typeorm';
-import bodyParser from 'body-parser';
+import { AppDataSource } from './dataSource';
 import { errorHandler } from './middlewares/errorHandler';
+import { v1Router } from './routes/v1';
 import { adminJsRootPath, getAdminBroRouter } from './routes/v1/adminbroRouter';
 import { logger } from './utils/logger';
 const cors = require('cors');
