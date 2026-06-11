@@ -27,7 +27,7 @@ export const initServer = async () => {
   const corsOptions = {
     origin(origin: string, callback: any) {
       if (!origin) {
-        // allow requests with no origin (like mobile apps, curl, ...)
+        // allow requests with no origin (like mobile apps, Curl, ...)
         return callback(null, true);
       }
 
