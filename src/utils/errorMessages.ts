@@ -153,4 +153,10 @@ export const errorMessagesEnum = {
     httpStatusCode: 403,
     code: 2010,
   },
+  UNSUPPORTED_NETWORK_FOR_SIGNATURE_VERIFICATION: {
+    message:
+      'Cannot verify this wallet signature on the requested network. Switch your wallet to a supported network and try again.',
+    httpStatusCode: 400,
+    code: 2011,
+  },
 };
