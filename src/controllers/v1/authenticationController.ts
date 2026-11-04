@@ -16,9 +16,8 @@ import { StandardError } from '../../types/StandardError';
 import { errorMessagesEnum } from '../../utils/errorMessages';
 import { logger } from '../../utils/logger';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
-import { getProvider, NETWORK_IDS } from '@/src/utils/provider';
 import { isBlacklisted } from '@/src/repositories/blacklistRepository';
-import * as verifier from '@/src/utils/verifySignature';
+import { verifyEvmSignature } from '@/src/utils/verifyEvmSignature';
 
 @Tags('Authentication')
 export class AuthenticationController {
@@ -27,16 +26,17 @@ export class AuthenticationController {
   public async ethereumAuthenticate(
     @Body() body: AuthenticationRequest,
   ): Promise<AuthenticationResponse> {
+    let message: SiweMessage | undefined;
     try {
-      const message = new SiweMessage(body.message);
-      const provider = getProvider(message.chainId);
+      message = new SiweMessage(body.message);
 
-      // Use the unified verifyMessage function for EOA, ERC1271, and ERC6492.
-      const isValidSignature = await verifier.verifyMessage({
-        signer: message.address,
+      // Offline for a plain wallet; an RPC on the message's chain only for a
+      // smart-contract wallet (see verifyEvmSignature).
+      const isValidSignature = await verifyEvmSignature({
+        address: message.address,
+        chainId: message.chainId,
         message: message.toMessage(),
         signature: body.signature,
-        provider: provider,
       });
 
       if (!isValidSignature) {
@@ -51,7 +51,11 @@ export class AuthenticationController {
 
       return await this.issueToken(tokenFields, body.nonce);
     } catch (e: any) {
+      // Address and chain make a failure traceable to one user; without them
+      // the only way to match a report to a log line was by timestamp.
       logger.error('Error during Ethereum authentication', {
+        address: message?.address,
+        chainId: message?.chainId,
         error: e.message,
         stack: e.stack,
       });
